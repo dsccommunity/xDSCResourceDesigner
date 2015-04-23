@@ -52,20 +52,32 @@ These uses of these functions are given below.
 
 ## Versions
 
-### 1.0.0.0
 
-*   Initial release with the following module 
-    *   xDSCResourceDesigner 
+### 1.2.0.0
 
-### 1.1.1.1
-
-*   Metadata updates.
-
+Merged changes from PowerShell.org fork
+    
+* Removed #Requires -RunAsAdministrator. 
+The commands that require Administrator rights already check for it anyway, and this allows the rest of the module to be used from a normal PowerShell session.
+* Added support for Enum types (with associated ValueMap)
+* Added support for EmbeddedInstances other than MSFT_Credential and MSFT_KeyValuePair
+* Fixed parameter name in Test-xDscResource comment-based help to match actual command definition
+* Updated Test-xDscResource to use a process block, since it accepts pipeline input.
+* Fixed invalid use of try/catch/finally in Test-MockSchema and Test-DscResourceModule
+* Updated code related to Common parameters; now handles all common parameters properly based on command metadata.
+* Added very basic tests for Test-xDscResource; these need to be fleshed out quite a bit later.
 
 ### 1.1.2
 
 *   Ignore -WhatIf and -Confirm internal parameters to suppress false errors when Set-TargetResource declares [CmdletBinding(SupportsShouldProcess=$true)] 
 
+### 1.1.1.1
+
+*   Metadata updates.
+
+### 1.0.0.0
+
+*   Initial release for xDSCResourceDesigner 
 
 ## Examples
 
