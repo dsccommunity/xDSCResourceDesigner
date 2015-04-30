@@ -12,7 +12,7 @@ Author = 'Microsoft Corporation'
 CompanyName = 'Microsoft Corporation'
 
 # Copyright statement for this module
-Copyright = '(c) 2014 Microsoft Corporation. All rights reserved.'
+Copyright = '(c) 2015 Microsoft Corporation. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'This module is meant to assist with the development and testing of DSC Resources.'
