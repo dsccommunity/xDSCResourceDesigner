@@ -219,9 +219,6 @@ Add-Type -ErrorAction Stop -TypeDefinition @"
         }
 "@
 
-[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::add("DscResourcePropertyAttribute","Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute")
-[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::add("DscResourceProperty","Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty")
-
 $TypeMap = @{
         "Uint8"   = [System.Byte];
         "Uint16"  = [System.UInt16];
