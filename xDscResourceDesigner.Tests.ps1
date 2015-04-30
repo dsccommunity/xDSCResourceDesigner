@@ -12,7 +12,8 @@ end
             Setup -File TestResource\TestResource.psm1 -Content (Get-TestDscResourceModuleContent)
 
             It 'Should fail the test' {
-                Test-xDscResource -Name $TestDrive\TestResource | Should Be $false
+                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $result | Should Be $false
             }
         }
 
@@ -21,7 +22,8 @@ end
             Setup -File TestResource\TestResource.schema.mof -Content (Get-TestDscResourceSchemaContent)
 
             It 'Should fail the test' {
-                Test-xDscResource -Name $TestDrive\TestResource | Should Be $false
+                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $result | Should Be $false
             }
         }
 
@@ -31,8 +33,58 @@ end
             Setup -File TestResource\TestResource.psm1 -Content (Get-TestDscResourceModuleContent)
 
             It 'Should pass the test' {
-                Test-xDscResource -Name $TestDrive\TestResource | Should Be $true
+                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $result | Should Be $true
             }
+        }
+    }
+
+    Describe New-xDscResourceProperty {
+        $hash = @{ Result = $null }
+
+        It 'Allows the use of the ValidateSet parameter' {
+            $scriptBlock = {
+                $hash.Result = New-xDscResourceProperty  -Name Ensure  -Type String  -Attribute Required  -ValidateSet 'Present','Absent'
+            }
+
+            $scriptBlock | Should Not Throw
+            
+            $hash.Result.Values.Count | Should Be 2
+            $hash.Result.Values[0]    | Should Be 'Present'
+            $hash.Result.Values[1]    | Should Be 'Absent'
+            
+            $hash.Result.ValueMap.Count | Should Be 2
+            $hash.Result.ValueMap[0]    | Should Be 'Present'
+            $hash.Result.ValueMap[1]    | Should Be 'Absent'
+        }
+
+        It 'Allows the use of the ValueMap and Values parameters' {
+            $scriptBlock = {
+                $hash.Result = New-xDscResourceProperty  -Name Ensure  -Type String  -Attribute Required  -Values 'Present','Absent' -ValueMap 'Present','Absent'
+            }
+            
+            $scriptBlock | Should Not Throw
+            
+            $hash.Result.Values.Count | Should Be 2
+            $hash.Result.Values[0]    | Should Be 'Present'
+            $hash.Result.Values[1]    | Should Be 'Absent'
+            
+            $hash.Result.ValueMap.Count | Should Be 2
+            $hash.Result.ValueMap[0]    | Should Be 'Present'
+            $hash.Result.ValueMap[1]    | Should Be 'Absent'
+        }
+
+        It 'Does not allow ValidateSet and Values / ValueMap to be used together' {
+            $scriptBlock = {
+                New-xDscResourceProperty  -Name Ensure `
+                                          -Type String `
+                                          -Attribute Required `
+                                          -Values 'Present','Absent' `
+                                          -ValueMap 'Present','Absent' `
+                                          -ValidateSet 'Present', 'Absent'
+            }
+
+            $scriptBlock | Should Throw 'Parameter set cannot be resolved'
         }
     }
 }

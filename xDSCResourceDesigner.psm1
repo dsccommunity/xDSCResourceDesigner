@@ -308,7 +308,7 @@ Description : Ensure Present or Absent
 #>
 function New-xDscResourceProperty
 {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ValidateSet')]
     [OutputType([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty])]
     param
     (
@@ -343,11 +343,17 @@ function New-xDscResourceProperty
         [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]
         $Attribute,
 
+        [Parameter(ParameterSetName = 'SupportsEnum')]
         [System.String[]]
         $ValueMap,
 
+        [Parameter(ParameterSetName = 'SupportsEnum')]
         [System.String[]]
         $Values,
+
+        [Parameter(ParameterSetName = 'ValidateSet')]
+        [System.String[]]
+        $ValidateSet,
 
         [System.String]
         $Description,
@@ -356,6 +362,12 @@ function New-xDscResourceProperty
         $ContainsEmbeddedInstance = $false
     )
     
+    if ($PSCmdlet.ParameterSetName -eq 'ValidateSet')
+    {
+        $Values = $ValidateSet
+        $ValueMap = $ValidateSet
+    }
+
     if ((Test-TypeIsArray $Type) -and [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Attribute)
     {
         $errorId = "KeyArrayError"
