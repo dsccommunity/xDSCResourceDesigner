@@ -52,7 +52,6 @@ These uses of these functions are given below.
 
 ## Versions
 
-
 ### 1.2.0.0
 
 Merged changes from PowerShell.org fork

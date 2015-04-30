@@ -312,7 +312,7 @@ Description : Ensure Present or Absent
 function New-xDscResourceProperty
 {
     [CmdletBinding()]
-    [OutputType([DscResourceProperty])]
+    [OutputType([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty])]
     param
     (
         [parameter(
@@ -343,7 +343,7 @@ function New-xDscResourceProperty
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourcePropertyAttribute]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]
         $Attribute,
 
         [System.String[]]
@@ -359,7 +359,7 @@ function New-xDscResourceProperty
         $ContainsEmbeddedInstance = $false
     )
     
-    if ((Test-TypeIsArray $Type) -and [DscResourcePropertyAttribute]::Key -eq $Attribute)
+    if ((Test-TypeIsArray $Type) -and [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Attribute)
     {
         $errorId = "KeyArrayError"
         Write-Error $localizedData[$errorId] `
@@ -397,7 +397,7 @@ function New-xDscResourceProperty
         ContainsEmbeddedInstance = $ContainsEmbeddedInstance
     }
 
-    $Property = New-Object "DscResourceProperty" -Property $hash
+    $Property = New-Object "Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty" -Property $hash
     
     return $Property
 }
@@ -448,7 +448,7 @@ function Test-PropertiesForResource
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Properties
     )
 
@@ -456,7 +456,7 @@ function Test-PropertiesForResource
     $key = $false
     foreach ($property in $Properties)
     {
-        if ([DscResourcePropertyAttribute]::Key -eq $property.Attribute)
+        if ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $property.Attribute)
         {
             $key = $true
             break
@@ -539,7 +539,7 @@ function New-xDscResource
             Mandatory = $true,
             Position = 1,
             ValueFromPipeline = $true)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Property,
 
         [Parameter(
@@ -733,7 +733,7 @@ function New-DscSchema
          [parameter(
             Mandatory = $true,
             Position = 3)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
         
         [parameter(
@@ -830,7 +830,7 @@ function New-DscSchemaParameter
         [parameter(
             Mandatory = $true,
             Position = 1)]
-        [DscResourceProperty]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty]
         $Parameter
     )
 
@@ -956,7 +956,7 @@ function New-DscModule
         [parameter(
             Mandatory = $true,
             Position = 3)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
         
         [Switch]
@@ -1003,7 +1003,7 @@ function New-GetTargetResourceFunction
         [parameter(
             Mandatory = $true,
             Position = 0)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
 
         [System.String]
@@ -1011,8 +1011,8 @@ function New-GetTargetResourceFunction
     )
 
     return New-DscModuleFunction "Get-TargetResource" `
-        ($Parameters | Where-Object {([DscResourcePropertyAttribute]::Key -eq $_.Attribute) `
-                                    -or ([DscResourcePropertyAttribute]::Required -eq $_.Attribute)})`
+        ($Parameters | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $_.Attribute) `
+                                    -or ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Required -eq $_.Attribute)})`
         "System.Collections.Hashtable"`
         ($Parameters)`
         -FunctionContent $functionContent
@@ -1026,7 +1026,7 @@ function New-SetTargetResourceFunction
         [parameter(
             Mandatory = $true,
             Position = 0)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
 
         [System.String]
@@ -1034,7 +1034,7 @@ function New-SetTargetResourceFunction
     )
 
     return New-DscModuleFunction "Set-TargetResource" `
-        ($Parameters | Where-Object {([DscResourcePropertyAttribute]::Read -ne $_.Attribute)})`
+        ($Parameters | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Read -ne $_.Attribute)})`
         -FunctionContent $functionContent
 }
 
@@ -1045,7 +1045,7 @@ function New-TestTargetResourceFunction
         [parameter(
             Mandatory = $true,
             Position = 0)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
 
         [System.String]
@@ -1053,7 +1053,7 @@ function New-TestTargetResourceFunction
     )
 
     return New-DscModuleFunction "Test-TargetResource" `
-        ($Parameters | Where-Object {([DscResourcePropertyAttribute]::Read -ne $_.Attribute)})`
+        ($Parameters | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Read -ne $_.Attribute)})`
         "Boolean"`
         -FunctionContent $functionContent
 }
@@ -1074,7 +1074,7 @@ function New-DscModuleFunction
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
 
         [parameter(
@@ -1086,7 +1086,7 @@ function New-DscModuleFunction
         [parameter(
             Mandatory = $false,
             Position = 4)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $ReturnValues,
 
         [parameter(
@@ -1176,7 +1176,7 @@ function New-DscModuleParameter
         [parameter(
             Mandatory = $true,
             Position = 1)]
-        [DscResourceProperty]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty]
         $Parameter,
 
         [parameter(
@@ -1188,8 +1188,8 @@ function New-DscModuleParameter
     
     $ParameterBuilder = New-Object -TypeName System.Text.StringBuilder
 
-    if (([DscResourcePropertyAttribute]::Key -eq $Parameter.Attribute) `
-            -or ([DscResourcePropertyAttribute]::Required -eq $Parameter.Attribute))
+    if (([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Parameter.Attribute) `
+            -or ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Required -eq $Parameter.Attribute))
     {
         Add-StringBuilderLine $ParameterBuilder "`t`t[parameter(Mandatory = `$true)]"
     }
@@ -1235,7 +1235,7 @@ function New-DscModuleReturn
         [parameter(
             Mandatory = $True,
             Position = 1)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters
     )
     
@@ -1428,7 +1428,7 @@ function Update-DscModule
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
 
         [Switch]
@@ -1564,7 +1564,7 @@ function Update-xDscResource
         $Path,
 
         [parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Property,
 
         [System.Version]
@@ -1820,17 +1820,17 @@ function Test-xDscResource
         #Check get has all key and required and that they are mandatory
 
         $getMandatoryError = -not (Test-GetKeyRequiredMandatory $GetCommandInfo.Parameters `
-                            ($DscResourceProperties | Where-Object {([DscResourcePropertyAttribute]::Key -eq $_.Attribute) `
-                                        -or ([DscResourcePropertyAttribute]::Required -eq $_.Attribute)}))
+                            ($DscResourceProperties | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $_.Attribute) `
+                                        -or ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Required -eq $_.Attribute)}))
         Write-Verbose ($localizedData["TestResourceGetMandatoryVerbose"] -f (-not $getMandatoryError))
         #Check that set has all write
 
         $setNoReadsError = -not (Test-SetHasExactlyAllNonReadProperties $SetCommandInfo `
-                        ($DscResourceProperties | Where-Object {([DscResourcePropertyAttribute]::Read -ne $_.Attribute)}))
+                        ($DscResourceProperties | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Read -ne $_.Attribute)}))
         Write-Verbose ($localizedData["TestResourceSetNoReadsVerbose"] -f (-not $setNoReadsError))
 
         $getNoReadsError = -not (Test-FunctionTakesNoReads $GetCommandInfo.Parameters `
-                        ($DscResourceProperties | Where-Object {([DscResourcePropertyAttribute]::Read -eq $_.Attribute)}) `
+                        ($DscResourceProperties | Where-Object {([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Read -eq $_.Attribute)}) `
                         -Get)
         Write-Verbose ($localizedData["TestResourceGetNoReadsVerbose"] -f (-not $getNoReadsError))
 
@@ -1853,7 +1853,7 @@ function Test-GetKeyRequiredMandatory
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $KeyRequiredDscResourceProperties,
 
         [ref]
@@ -1896,7 +1896,7 @@ function Test-SetHasExactlyAllNonReadProperties
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $NonReadDscResourceProperties,
 
         [ref]
@@ -1960,7 +1960,7 @@ function Test-FunctionTakesNoReads
         [parameter(
             Mandatory = $false,
             Position = 2)]
-        [DscResourceProperty[]]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $ReadDscResourceProperties,
 
         [Switch]
@@ -2017,7 +2017,7 @@ function Test-ParameterMetaDataIsDscResourceProperty
         [parameter(
             Mandatory = $true,
             Position = 2)]
-        [DscResourceProperty]
+        [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty]
         $property
     )
 
