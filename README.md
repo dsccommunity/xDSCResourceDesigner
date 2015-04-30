@@ -52,9 +52,6 @@ These uses of these functions are given below.
 
 ## Versions
 
-### 1.2.1.0
-Removed the use of type accelerators and used the fully qualified type names
-
 ### 1.2.0.0
 
 Merged changes from PowerShell.org fork
