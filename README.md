@@ -52,6 +52,10 @@ These uses of these functions are given below.
 
 ## Versions
 
+### 1.3.0.0
+
+* Minor fixes after PowerShell.org fork merge.
+
 ### 1.2.0.0
 
 Merged changes from PowerShell.org fork
