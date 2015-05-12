@@ -1576,6 +1576,9 @@ function Update-xDscResource
         [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Property,
 
+        [System.String]
+        $FriendlyName,
+
         [System.Version]
         $ClassVersion = "1.0.0.0",
 
@@ -1613,6 +1616,27 @@ function Update-xDscResource
     $fullPath = [IO.Path]::GetDirectoryName($SchemaPath)
 
     Update-DscModule $ModulePath $Property -Force:$Force -ParentPSCmdlet $PSCmdlet -Confirm
+
+    # If Friendly name is not specified, try to read it from current schema.
+    if(-Not ($PSBoundParameters.ContainsKey('FriendlyName')))
+    {
+        $cimClass = 0
+        Try
+        {
+            [System.Void](Test-xDscSchemaInternal -Schema $SchemaPath -SchemaCimClass ([ref]$cimClass) -ErrorAction Stop 2>&1)
+        }
+        Finally
+        {
+            if($cimClass -ne 0)
+            {
+                $FriendlyName = $cimClass.CimClassQualifiers.Where{$_.Name -eq 'FriendlyName'}.Value
+            }
+            else
+            {
+                $FriendlyName = ''
+            }
+        }
+    }
 
     # Update the schema if Update-DscModule doesn't throw any errors.
     New-DscSchema $Name $fullPath $Property $ClassVersion -FriendlyName:$FriendlyName -Force:$Force -ParentPSCmdlet $PSCmdlet -Confirm
