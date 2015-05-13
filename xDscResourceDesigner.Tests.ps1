@@ -87,6 +87,32 @@ end
             $scriptBlock | Should Throw 'Parameter set cannot be resolved'
         }
     }
+
+    Describe 'Creating and updating resources' {
+        Context 'Creating and updating a DSC Resource' {
+            Setup -Dir TestResource
+            $ResourceProperties = $( 
+                New-xDscResourceProperty -Name KeyProperty -Type String -Attribute Key
+                New-xDscResourceProperty -Name RequiredProperty -Type String -Attribute Required
+                New-xDscResourceProperty -Name WriteProperty -Type String -Attribute Write
+                New-xDscResourceProperty -Name ReadProperty -Type String -Attribute Read
+            )
+            New-xDscResource -Name TestResource -FriendlyName cTestResource -Path $TestDrive -Property $ResourceProperties -Force
+            # Removing empty lines in module since Update-xDSCResouce adds new empty lines, this has been reported as an issue.
+            $NewSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+            $NewModuleContent = -join(Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1") -notmatch '^\s*$'
+            Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -Force
+            $UpdatedSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+            $UpdatedModuleContent = -join(Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1") -notmatch '^\s*$'
+            It 'Creates a valid module script and schema' {
+                Test-xDscResource -Name "$TestDrive\DSCResources\TestResource" | Should Be $true
+            }
+            It 'Updated Module Script and Schema should be equal to original' {
+                $NewSchemaContent -eq $UpdatedSchemaContent | Should Be $true
+                $NewModuleContent -eq $UpdatedModuleContent | Should Be $true
+            }
+        }
+    }
 }
 
 begin
