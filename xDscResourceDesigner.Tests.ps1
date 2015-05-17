@@ -12,7 +12,7 @@ end
             Setup -File TestResource\TestResource.psm1 -Content (Get-TestDscResourceModuleContent)
 
             It 'Should fail the test' {
-                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $null = $($result = Test-xDscResource -Name $TestDrive\TestResource) 2>&1
                 $result | Should Be $false
             }
         }
@@ -22,7 +22,7 @@ end
             Setup -File TestResource\TestResource.schema.mof -Content (Get-TestDscResourceSchemaContent)
 
             It 'Should fail the test' {
-                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $null = $($result = Test-xDscResource -Name $TestDrive\TestResource) 2>&1
                 $result | Should Be $false
             }
         }
@@ -85,6 +85,87 @@ end
             }
 
             $scriptBlock | Should Throw 'Parameter set cannot be resolved'
+        }
+    }
+    InModuleScope xDscResourceDesigner {
+         function Get-xDSCSchemaFriendlyName
+        {
+            Param(
+                $Path
+            )
+            $cimClass = 0
+            Try
+            {
+                [System.Void](Test-xDscSchemaInternal -Schema $Path -SchemaCimClass ([ref]$cimClass) -ErrorAction Stop 2>&1)
+                if($cimClass -ne 0)
+                {
+                    $FriendlyName = $cimClass.CimClassQualifiers.Where{$_.Name -eq 'FriendlyName'}.Value
+                }
+            }
+            Catch
+            {
+                Throw
+            }
+            return $FriendlyName
+        }
+        Describe 'Creating and updating resources' {
+            Context 'Creating and updating a DSC Resource' {
+                Setup -Dir TestResource
+                #region Create New Resource
+                $ResourceProperties = $( 
+                    New-xDscResourceProperty -Name KeyProperty -Type String -Attribute Key
+                    New-xDscResourceProperty -Name RequiredProperty -Type String -Attribute Required
+                    New-xDscResourceProperty -Name WriteProperty -Type String -Attribute Write
+                    New-xDscResourceProperty -Name ReadProperty -Type String -Attribute Read
+                )
+                New-xDscResource -Name TestResource -FriendlyName cTestResource -Path $TestDrive -Property $ResourceProperties -Force
+                $OriginalFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
+                $NewSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+                $NewModuleContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1" -Raw
+                
+                It 'Creates a valid module script and schema' {
+                    Test-xDscResource -Name "$TestDrive\DSCResources\TestResource" | Should Be $true
+                }
+                
+                #endregion
+
+                #region Update Resource using exact same config (should result in unchanged resource)
+                Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -Force
+                $UpdatedFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
+                $UpdatedSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+                $UpdatedModuleContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1" -Raw
+                
+                It 'Updated Module Script and Schema should be equal to original' {
+                    $NewSchemaContent -eq $UpdatedSchemaContent | Should Be $true
+                    $NewModuleContent -eq $UpdatedModuleContent | Should Be $true
+                }
+                
+                #endregion
+
+                #region Update Resurce again using same config but specify new FriendlyName
+                Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -FriendlyName TestResource -Force
+                $ChangedFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
+                
+                It 'Changes friendly name in Schema when using -FriendlyName with Update-xDscResource' {
+                    $OriginalFriendlyName -ne $ChangedFriendlyName | Should Be $true
+                    $ChangedFriendlyName -eq 'TestResource' | Should Be $true
+                }
+                
+                #endregion
+
+                #region Change FrientlyName back to original value and validate that schema is identical to original schema
+                Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -FriendlyName cTestResource -Force
+                $RestoredSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+
+                It 'Changes ONLY friendly name in Schema when using -FriendlyName with Update-xDscResource' {
+                    $NewSchemaContent -eq $RestoredSchemaContent | Should Be $true
+                }
+
+                #endregion
+
+                
+                
+            }
         }
     }
 }
@@ -164,4 +245,5 @@ class TestResource : OMI_BaseResource
 
         return $content
     }
+   
 }
