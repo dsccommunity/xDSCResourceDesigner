@@ -121,34 +121,50 @@ end
                 New-xDscResource -Name TestResource -FriendlyName cTestResource -Path $TestDrive -Property $ResourceProperties -Force
                 $OriginalFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
                 $NewSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
-                # Removing empty lines in module since Update-xDSCResouce adds new empty lines, this has been reported as an issue.
-                $NewModuleContent = -join(Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1") -notmatch '^\s*$'
+                $NewModuleContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1" -Raw
+                
+                It 'Creates a valid module script and schema' {
+                    Test-xDscResource -Name "$TestDrive\DSCResources\TestResource" | Should Be $true
+                }
+                
                 #endregion
 
                 #region Update Resource using exact same config (should result in unchanged resource)
                 Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -Force
                 $UpdatedFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
                 $UpdatedSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
-                # Removing empty lines in module since Update-xDSCResouce adds new empty lines, this has been reported as an issue.
-                $UpdatedModuleContent = -join(Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1") -notmatch '^\s*$'
+                $UpdatedModuleContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.psm1" -Raw
+                
+                It 'Updated Module Script and Schema should be equal to original' {
+                    $NewSchemaContent -eq $UpdatedSchemaContent | Should Be $true
+                    $NewModuleContent -eq $UpdatedModuleContent | Should Be $true
+                }
+                
                 #endregion
 
                 #region Update Resurce again using same config but specify new FriendlyName
                 Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -FriendlyName TestResource -Force
                 $ChangedFriendlyName = Get-xDSCSchemaFriendlyName -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof"
-                #endregion
-
-                It 'Creates a valid module script and schema' {
-                    Test-xDscResource -Name "$TestDrive\DSCResources\TestResource" | Should Be $true
-                }
-                It 'Updated Module Script and Schema should be equal to original' {
-                    $NewSchemaContent -eq $UpdatedSchemaContent | Should Be $true
-                    $NewModuleContent -eq $UpdatedModuleContent | Should Be $true
-                }
+                
                 It 'Changes friendly name in Schema when using -FriendlyName with Update-xDscResource' {
                     $OriginalFriendlyName -ne $ChangedFriendlyName | Should Be $true
                     $ChangedFriendlyName -eq 'TestResource' | Should Be $true
                 }
+                
+                #endregion
+
+                #region Change FrientlyName back to original value and validate that schema is identical to original schema
+                Update-xDscResource -Path "$TestDrive\DSCResources\TestResource" -Property $ResourceProperties -FriendlyName cTestResource -Force
+                $RestoredSchemaContent = Get-Content -Path "$TestDrive\DSCResources\TestResource\TestResource.schema.mof" -Raw
+
+                It 'Changes ONLY friendly name in Schema when using -FriendlyName with Update-xDscResource' {
+                    $NewSchemaContent -eq $RestoredSchemaContent | Should Be $true
+                }
+
+                #endregion
+
+                
+                
             }
         }
     }
