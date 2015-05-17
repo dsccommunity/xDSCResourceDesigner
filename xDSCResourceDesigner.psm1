@@ -1133,7 +1133,7 @@ function New-DscModuleFunction
     
     if ($FunctionContent) # If we are updating an already existing function
     {
-        Add-StringBuilderLine $Function $FunctionContent
+        Add-StringBuilderLine $Function $FunctionContent -Append
     }
     else # Add some useful comments
     {
@@ -1496,7 +1496,7 @@ function Update-DscModule
             $newModule.AppendLine($moduleLines[$cur]) | Out-Null
         }
 
-        $newModule.AppendLine($updatedFunctions[$functionName]) | Out-Null
+        $newModule.Append($updatedFunctions[$functionName]) | Out-Null
 
         #Set cur to the line after the end of the function block
         $cur = (Convert-LineNumberToIndex $functionLineNumbers[$functionName][2]) + 1
@@ -1504,10 +1504,12 @@ function Update-DscModule
     }
 
     # Copy everything after the end of the last function
-    for (; $cur -lt $moduleLines.Count; $cur++)
+    for (; $cur -lt $moduleLines.Count-1; $cur++)
     {
         $newModule.AppendLine($moduleLines[$cur]) | Out-Null
     }
+    # Copy the last line
+    $newModule.Append($moduleLines[++$cur]) | Out-Null
 
     # Add any functions that weren't found in the module at the end of the file
     foreach ($functionName in $functionNames)
