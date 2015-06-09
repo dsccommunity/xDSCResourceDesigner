@@ -6,6 +6,13 @@ end
     Remove-Module [x]DscResourceDesigner -Force
     Import-Module $PSScriptRoot\xDscResourceDesigner.psd1 -ErrorAction Stop
 
+    Describe 'xDscResourceDesigner' {
+        It 'Should not error if imported twice' {
+            Remove-Module [x]DscResourceDesigner -Force
+            { Import-Module $PSScriptRoot\xDscResourceDesigner.psd1 -ErrorAction Stop } | Should Not Throw
+        }
+    }
+
     Describe Test-xDscResource {
         Context 'A module with a psm1 file but no matching schema.mof' {
             Setup -Dir TestResource
@@ -87,8 +94,9 @@ end
             $scriptBlock | Should Throw 'Parameter set cannot be resolved'
         }
     }
+
     InModuleScope xDscResourceDesigner {
-         function Get-xDSCSchemaFriendlyName
+        function Get-xDSCSchemaFriendlyName
         {
             Param(
                 $Path

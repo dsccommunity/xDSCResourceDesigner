@@ -97,7 +97,9 @@ SetTestTakeReadError=The functions Set-TargetResource and Test-TargetResource ca
 # Path to mofcomp
 $mofcomp = Join-Path $env:windir system32\wbem\mofcomp.exe
 
-Add-Type -ErrorAction Stop -TypeDefinition @" 
+if (-not ([System.Management.Automation.PSTypeName]'DscResourcePropertyAttribute').Type)
+{
+    Add-Type -ErrorAction Stop -TypeDefinition @" 
         namespace Microsoft.PowerShell.xDesiredStateConfiguration
         {
             using System;
@@ -218,6 +220,7 @@ Add-Type -ErrorAction Stop -TypeDefinition @"
             }
         }
 "@
+}
 
 $TypeMap = @{
         "Uint8"   = [System.Byte];
