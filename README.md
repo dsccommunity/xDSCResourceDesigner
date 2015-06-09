@@ -52,6 +52,11 @@ These uses of these functions are given below.
 
 ## Versions
 
+### 1.4.0.0
+*	Added support and tests for -FriendlyName in Update-xDscResource cmdlet
+*	Minor fixes for Update-xDscResource cmdlet
+*	Added tests for creating and updating resources
+
 ### 1.3.0.0
 
 * Minor fixes after PowerShell.org fork merge.
