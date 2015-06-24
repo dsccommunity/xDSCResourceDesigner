@@ -16,7 +16,7 @@ As specified in the license, you may copy or modify this tool as long as they ar
 For more information about Windows PowerShell Desired State Configuration, check out the blog posts on the [PowerShell Blog](http://blogs.msdn.com/b/powershell/) ([this](http://blogs.msdn.com/b/powershell/archive/2013/11/01/configuration-in-a-devops-world-windows-powershell-desired-state-configuration.aspx) is a good starting point).
 There are also great community resources, such as [PowerShell.org](http://powershell.org/wp/tag/dsc/), or [PowerShell Magazine](http://www.powershellmagazine.com/tag/dsc/).
 For more information on the DSC Resource Kit, check out [this blog post](http://go.microsoft.com/fwlink/?LinkID=389546).
- 
+
 
 ## Installation
 
@@ -24,9 +24,9 @@ To install **xDSCResourceDesigner** module
 
 *   Unzip the content under $env:ProgramFiles\WindowsPowerShell\Modules folder
 
-To confirm installation:  
+To confirm installation:
 
-*   Run **Get-Module -ListAvailable** to see that **xDSCResourceDesigner** is among the modules listed  
+*   Run **Get-Module -ListAvailable** to see that **xDSCResourceDesigner** is among the modules listed
 
 ## Requirements
 
@@ -43,14 +43,18 @@ These uses of these functions are given below.
 
 **xDSCResourceDesigner** module exposes the following functions:
 
-*   **New-xDscResourceProperty**: For creating a property for the resource 
-*   **New-xDscResource**: for creating the actual resource containing the schema and module skeleton 
-*   **Update-xDscResource**: for updating an existing resource with new properties 
-*   **Test-xDscResource**: for testing whether an existing resource conforms to the rules required by DSC 
-*   **Test-xDscSchema**: for testing whether an existing schema (schema.mof) conforms to the rules required by DSC 
-*   **Import-xDscSchema**: for getting the properties in a schema returned as a hashtable 
+*   **New-xDscResourceProperty**: For creating a property for the resource
+*   **New-xDscResource**: for creating the actual resource containing the schema and module skeleton
+*   **Update-xDscResource**: for updating an existing resource with new properties
+*   **Test-xDscResource**: for testing whether an existing resource conforms to the rules required by DSC
+*   **Test-xDscSchema**: for testing whether an existing schema (schema.mof) conforms to the rules required by DSC
+*   **Import-xDscSchema**: for getting the properties in a schema returned as a hashtable
 
 ## Versions
+
+### Unreleased
+
+-  Fix problems with calling Add-Type twice.
 
 ### 1.4.0.0
 * Added support and tests for -FriendlyName on Update-xDscResource
@@ -64,8 +68,8 @@ These uses of these functions are given below.
 ### 1.2.0.0
 
 Merged changes from PowerShell.org fork
-    
-* Removed #Requires -RunAsAdministrator. 
+
+* Removed #Requires -RunAsAdministrator.
 The commands that require Administrator rights already check for it anyway, and this allows the rest of the module to be used from a normal PowerShell session.
 * Added support for Enum types (with associated ValueMap)
 * Added support for EmbeddedInstances other than MSFT_Credential and MSFT_KeyValuePair
@@ -77,7 +81,7 @@ The commands that require Administrator rights already check for it anyway, and 
 
 ### 1.1.2
 
-*   Ignore -WhatIf and -Confirm internal parameters to suppress false errors when Set-TargetResource declares [CmdletBinding(SupportsShouldProcess=$true)] 
+*   Ignore -WhatIf and -Confirm internal parameters to suppress false errors when Set-TargetResource declares [CmdletBinding(SupportsShouldProcess=$true)]
 
 ### 1.1.1.1
 
@@ -85,7 +89,7 @@ The commands that require Administrator rights already check for it anyway, and 
 
 ### 1.0.0.0
 
-*   Initial release for xDSCResourceDesigner 
+*   Initial release for xDSCResourceDesigner
 
 ## Examples
 
@@ -105,14 +109,14 @@ This can only take two values: ‘Present’ and ‘Absent’.
 #>
 
 $UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
-$Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write 
-$DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write 
-$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent" 
+$Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write
+$DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write
+$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"
 #Now create the resource
-New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'  
+New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'
 
-<# 
-Create a ADUser DSC Resource with following properties 
+<#
+Create a ADUser DSC Resource with following properties
 UserName: Name of the ADUser.
 This is a  key property for the resource that uniquely identify an instance.
 
@@ -124,15 +128,15 @@ DomainAdminstratorCredential: Credential of the Domain Administrator in which us
 Ensure: Whether an user account should be created or deleted.
 This can only take two values: ‘Present’ and ‘Absent’.
 
-#> 
- 
-$UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key 
-$Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write  
-$DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write  
-$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"  
- 
-#Now create the resource 
-New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'   
+#>
+
+$UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
+$Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write
+$DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write
+$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"
+
+#Now create the resource
+New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'
 
 
 ### Test an Incorrect Resource Definition
@@ -151,16 +155,16 @@ class Contoso_cADUser : OMI_BaseResource
 #>
 # This reports that the schema is buggy.
 Test-xDscSchema -Path .\buggy.schema.mof
-<# 
-Suppose you have the following schema (named buggy.schema.mof): 
-[ClassVersion("1.0.0.0"), FriendlyName("")] 
-class Contoso_cADUser : OMI_BaseResource 
-{ 
-       [Key] String UserName; 
-       [Write, ValueMap{"Present","Absent"}, Values{"Present","Absent"}] String Ensure; 
-}; 
-#> 
- 
+<#
+Suppose you have the following schema (named buggy.schema.mof):
+[ClassVersion("1.0.0.0"), FriendlyName("")]
+class Contoso_cADUser : OMI_BaseResource
+{
+       [Key] String UserName;
+       [Write, ValueMap{"Present","Absent"}, Values{"Present","Absent"}] String Ensure;
+};
+#>
+
 # This reports that the schema is buggy.
 
 Test-xDscSchema -Path .\buggy.schema.mof
@@ -172,17 +176,17 @@ This example will use Update-xDscResource function to update an already existing
 
 ```powershell
 #Assume, you want to add an additional property called LastLogOn on existing Constoso_cADUser resource
-$lastLogOn = New-xDscResourceProperty -Name LastLogOn -Type Hashtable -Attribute Read -Description "Returns the user last log on time" 
+$lastLogOn = New-xDscResourceProperty -Name LastLogOn -Type Hashtable -Attribute Read -Description "Returns the user last log on time"
 #Update the existing resource
 Update-xDscResource -Name 'Contoso_cADUser' -Property $UserName, $Password, $DomainCredential, $Ensure, $lastLogOn -Force
-#Assume, you want to add an additional property called LastLogOn on existing Constoso_cADUser resource 
- 
-$lastLogOn = New-xDscResourceProperty -Name LastLogOn -Type Hashtable -Attribute Read -Description "Returns the user last log on time"  
- 
-#Update the existing resource 
+#Assume, you want to add an additional property called LastLogOn on existing Constoso_cADUser resource
+
+$lastLogOn = New-xDscResourceProperty -Name LastLogOn -Type Hashtable -Attribute Read -Description "Returns the user last log on time"
+
+#Update the existing resource
 Update-xDscResource -Name 'Contoso_cADUser' -Property $UserName, $Password, $DomainCredential, $Ensure, $lastLogOn -Force
 ```
- 
+
 
 ## Contributing
 Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
