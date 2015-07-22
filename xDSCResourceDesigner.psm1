@@ -848,7 +848,7 @@ function New-DscSchemaParameter
 
     $SchemaEntry = New-Object -TypeName System.Text.StringBuilder
 
-    Add-StringBuilderLine $SchemaEntry "`t[" -Append
+    Add-StringBuilderLine $SchemaEntry "[" -IndentCount 1 -Append
     Add-StringBuilderLine $SchemaEntry $Parameter.Attribute -Append
     
     if ($EmbeddedInstances.ContainsKey($Parameter.Type))
@@ -1113,15 +1113,15 @@ function New-DscModuleFunction
 
     Add-StringBuilderLine $Function "function $Name"
     Add-StringBuilderLine $Function "{"
-    Add-StringBuilderLine $Function     "`t[CmdletBinding()]"
+    Add-StringBuilderLine $Function     "[CmdletBinding()]" -IndentCount 1
 
     if ($ReturnType)
     {
-        Add-StringBuilderLine $Function ("`t[OutputType([" + $ReturnType.FullName +"])]")
+        Add-StringBuilderLine $Function ("[OutputType([" + $ReturnType.FullName +"])]") -IndentCount 1
     }
 
-    Add-StringBuilderLine $Function     "`tparam"
-    Add-StringBuilderLine $Function     "`t("
+    Add-StringBuilderLine $Function     "param" -IndentCount 1
+    Add-StringBuilderLine $Function     "(" -IndentCount 1
 
     for ($i = 0; $i -lt ($Parameters.Count - 1); $i++)
     {
@@ -1132,7 +1132,7 @@ function New-DscModuleFunction
     # $Parameters is at least size 1
     Add-StringBuilderLine  $Function (New-DscModuleParameter $Parameters[$i] -Last)
 
-    Add-StringBuilderLine  $Function     "`t)"
+    Add-StringBuilderLine  $Function     ")" -IndentCount 1
     
     if ($FunctionContent) # If we are updating an already existing function
     {
@@ -1142,15 +1142,15 @@ function New-DscModuleFunction
     {
         Add-StringBuilderLine  $Function 
 
-        Add-StringBuilderLine $Function ("`t#Write-Verbose `"" + $localizedData.UsingWriteVerbose + "`"")
+        Add-StringBuilderLine $Function ("#Write-Verbose `"" + $localizedData.UsingWriteVerbose + "`"") -IndentCount 1
         Add-StringBuilderLine $Function
-        Add-StringBuilderLine $Function ("`t#Write-Debug `"" + $localizedData.UsingWriteDebug + "`"")
+        Add-StringBuilderLine $Function ("#Write-Debug `"" + $localizedData.UsingWriteDebug + "`"") -IndentCount 1
     
         if ($Name.Contains("Set-TargetResource"))
         {
             Add-StringBuilderLine $Function
-            Add-StringBuilderLine $Function ("`t#" + $localizedData.IfRebootRequired)
-            Add-StringBuilderLine $Function "`t#`$global:DSCMachineStatus = 1"
+            Add-StringBuilderLine $Function ("#" + $localizedData.IfRebootRequired) -IndentCount 1
+            Add-StringBuilderLine $Function "#`$global:DSCMachineStatus = 1" -IndentCount 1
         }
 
         Add-StringBuilderLine $Function 
@@ -1162,13 +1162,13 @@ function New-DscModuleFunction
         }
         elseif ($ReturnType -ne $null)
         {
-            Add-StringBuilderLine $Function "`t<#"
-            Add-StringBuilderLine $Function "`t`$result = [" -Append
+            Add-StringBuilderLine $Function "<#" -IndentCount 1
+            Add-StringBuilderLine $Function "`$result = [" -IndentCount 1 -Append
             Add-StringBuilderLine $Function $ReturnType.FullName -Append
             Add-StringBuilderLine $Function "]"
-            Add-StringBuilderLine $Function "`t"
-            Add-StringBuilderLine $Function "`t`$result"
-            Add-StringBuilderLine $Function "`t#>"
+            Add-StringBuilderLine $Function "" -IndentCount 1
+            Add-StringBuilderLine $Function "`$result" -IndentCount 1
+            Add-StringBuilderLine $Function "#>" -IndentCount 1
         }
     }
 
@@ -1203,7 +1203,7 @@ function New-DscModuleParameter
     if (([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Parameter.Attribute) `
             -or ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Required -eq $Parameter.Attribute))
     {
-        Add-StringBuilderLine $ParameterBuilder "`t`t[parameter(Mandatory = `$true)]"
+        Add-StringBuilderLine $ParameterBuilder "[parameter(Mandatory = `$true)]" -IndentCount 2
     }
 
     if ($Parameter.Values)
@@ -1216,7 +1216,7 @@ function New-DscModuleParameter
 
         $ValidateSetProperty = New-Object -TypeName System.Text.StringBuilder
         
-        Add-StringBuilderLine $ValidateSetProperty "`t`t[ValidateSet(" -Append
+        Add-StringBuilderLine $ValidateSetProperty "[ValidateSet(" -IndentCount 2 -Append
 
         Add-StringBuilderLine $ValidateSetProperty `
             (New-DelimitedList $set -String:($Parameter.Type -eq "String")) -Append
@@ -1227,10 +1227,10 @@ function New-DscModuleParameter
     }
 
     $typeString = $TypeMap[$Parameter.Type].ToString()
-    Add-StringBuilderLine $ParameterBuilder "`t`t[$TypeString]"
+    Add-StringBuilderLine $ParameterBuilder "[$TypeString]" -IndentCount 2
 
     #Append, so the "," is added on the same line
-    Add-StringBuilderLine $ParameterBuilder ("`t`t$"+$Parameter.Name) -Append
+    Add-StringBuilderLine $ParameterBuilder ("$"+$Parameter.Name) -IndentCount 2 -Append
 
     if (-not $Last)
     {
@@ -1253,13 +1253,13 @@ function New-DscModuleReturn
     
     $HashTable = New-Object -TypeName System.Text.StringBuilder
 
-    Add-StringBuilderLine $HashTable "`t<#"
-    Add-StringBuilderLine $HashTable "`t`$returnValue = @{"
+    Add-StringBuilderLine $HashTable "<#" -IndentCount 1
+    Add-StringBuilderLine $HashTable "`$returnValue = @{" -IndentCount 1
     
     $Parameters | foreach {
 
         $HashTableEntry = New-Object -TypeName System.Text.StringBuilder
-        Add-StringBuilderLine $HashTableEntry "`t`t" -Append
+        Add-StringBuilderLine $HashTableEntry "" -IndentCount 1 -Append
         Add-StringBuilderLine $HashTableEntry $_.Name -Append
         Add-StringBuilderLine $HashTableEntry " = [" -Append
         Add-StringBuilderLine $HashTableEntry $TypeMap[$_.Type].ToString() -Append
@@ -1269,10 +1269,10 @@ function New-DscModuleReturn
 
     }
     
-    Add-StringBuilderLine $HashTable "`t}"
+    Add-StringBuilderLine $HashTable "}" -IndentCount 1
     Add-StringBuilderLine $HashTable
-    Add-StringBuilderLine $HashTable "`t`$returnValue"
-    Add-StringBuilderLine $HashTable "`t#>" -Append
+    Add-StringBuilderLine $HashTable "`$returnValue" -IndentCount 1
+    Add-StringBuilderLine $HashTable "#>" -IndentCount 1 -Append
 
     return $HashTable.ToString()
 }
@@ -1293,19 +1293,37 @@ function Add-StringBuilderLine
             Position = 2)]
         [System.String]
         $Line,
+        
+        [parameter(
+            Mandatory = $false,
+            Position = 3
+        )]
+        [System.Int32]
+        $IndentCount,
+        
+        [parameter(
+            Mandatory = $false,
+            Position = 4
+        )]
+        [System.Int32]
+        $IndentLength = 4,
 
         [parameter(Mandatory = $false)]
         [Switch]
         $Append
     )
-    
+    $IndentString = ' ' * $IndentLength
+    if($IndentCount -gt 0)
+    {
+        $Line = '{0}{1}' -f ($IndentString * $IndentCount), $Line
+    }
+        
     if ($Append)
     {
         $null = $Builder.Append($Line)
         return     
     }
    
-
     if ($Line)
     {
         $null = $Builder.AppendLine($Line)
