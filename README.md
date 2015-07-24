@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
+﻿[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
 
 # xDSCResourceDesigner
 
@@ -54,9 +54,13 @@ These uses of these functions are given below.
 
 ### Unreleased
 
--  Fix problems with calling Add-Type twice.
+
+### 1.5.0.0
+
+* Fixed issue with adding type twice through Add-Type
 
 ### 1.4.0.0
+
 * Added support and tests for -FriendlyName on Update-xDscResource
 * Added tests for creating and updating resources
 * Minor fixes for Update-xDscResource
