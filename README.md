@@ -2,7 +2,7 @@
 
 # xDSCResourceDesigner
 
-The** xDSCResourceDesigner** module is a part of the Windows PowerShell Desired State Configuration (DSC) Resource Kit, which is a tool to author PowerShell DSC Resources and produced by the PowerShell Team.This tool makes writing resources a breeze and ensure that all the rules which a DSC resource must conform to are met.
+The **xDSCResourceDesigner** module is a part of the Windows PowerShell Desired State Configuration (DSC) Resource Kit, which is a tool to author PowerShell DSC Resources and produced by the PowerShell Team.This tool makes writing resources a breeze and ensure that all the rules which a DSC resource must conform to are met.
 
 **All of the functions/cmdlets in the Resource Designer Tool are provided AS IS, and are not supported through any Microsoft standard support program or service.
 The "x" in xDSCResourceDesigner stands for experimental**, which means that this tool will be **fix forward** and monitored by the module owner(s).
