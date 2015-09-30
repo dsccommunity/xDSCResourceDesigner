@@ -57,7 +57,7 @@ UsingWriteDebug=Use this cmdlet to write debug information while troubleshooting
 IfRebootRequired=Include this line if the resource requires a system reboot.
 BadSchemaPath=The parameter -Schema must be a path to a .schema.mof file.
 BadResourceMOdulePath=The parameter -ResourceModule must be a path to a .psm1 or .dll file.
-SchemaParseError=There was an error parsing the Schema file. 
+SchemaParseError=There was an error parsing the Schema file.
 GetCimClass-Error=There was an error retrieving the Schema.
 ImportResourceModuleError=There was an error importing the Resource Module.
 KeyFunctionsNotDefined=The following functions were not found: {0}.
@@ -87,7 +87,7 @@ IllegalAttributeCombinationError=For property {0}, the attribute Read can not be
 GetMissingKeyOrRequiredError=The function Get-TargetResource must take all Key and Required properties, and they must be mandatory. There was an issue with property {0}.
 SetAndTestMissingParameterError=The functions Set-TargetResource and Test-TargetResource must take all Key, Required and Write properties. There is an issue with the parameter {0} defined in the schema.
 SetAndTestExtraParameterError=The functions Set-TargetResource and Test-TargetResource have an extra parameter {0} that is not defined in the schema.
-GetTakesReadError=The function Get-TargetResource can not take the read property {0}, defined in the schema, as a parameter. 
+GetTakesReadError=The function Get-TargetResource can not take the read property {0}, defined in the schema, as a parameter.
 SetTestTakeReadError=The functions Set-TargetResource and Test-TargetResource can not take the read property {0} defined in the schema as a parameter.
 '@
 }
@@ -97,9 +97,9 @@ SetTestTakeReadError=The functions Set-TargetResource and Test-TargetResource ca
 # Path to mofcomp
 $mofcomp = Join-Path $env:windir system32\wbem\mofcomp.exe
 
-if (-not ([System.Management.Automation.PSTypeName]'DscResourcePropertyAttribute').Type)
+if (-not ([System.Management.Automation.PSTypeName]'Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty').Type)
 {
-    Add-Type -ErrorAction Stop -TypeDefinition @" 
+    Add-Type -ErrorAction Stop -TypeDefinition @"
         namespace Microsoft.PowerShell.xDesiredStateConfiguration
         {
             using System;
@@ -196,7 +196,7 @@ if (-not ([System.Management.Automation.PSTypeName]'DscResourcePropertyAttribute
                     {
                         return description;
                     }
-                
+
                     set
                     {
                         description = value;
@@ -237,7 +237,7 @@ $TypeMap = @{
         "String"  = [System.String];
         "Boolean" = [System.Boolean];
         "DateTime"= [System.DateTime];
-        
+
         "Hashtable"    = [Microsoft.Management.Infrastructure.CimInstance[]];
         "PSCredential" = [PSCredential];
 
@@ -255,7 +255,7 @@ $TypeMap = @{
         "String[]"  = [System.String[]];
         "Boolean[]" = [System.Boolean[]];
         "DateTime[]"= [System.DateTime[]];
-        
+
         # An array of hashtables is not converted back to a hashtable, but is
         # passed to the provider as an array of CimInstances
         "Hashtable[]"    = [Microsoft.Management.Infrastructure.CimInstance[]];
@@ -277,7 +277,7 @@ $NameRegex = "^[a-zA-Z][\w_]*$"
 $NameMaxLength = 255 #This number is hardcoded into the localization text as 255
 
 <#
-.SYNOPSIS 
+.SYNOPSIS
 Creates a DscResourceProperty to be used by New-xDscResource.
 
 .DESCRIPTION
@@ -364,7 +364,7 @@ function New-xDscResourceProperty
         [bool]
         $ContainsEmbeddedInstance = $false
     )
-    
+
     if ($PSCmdlet.ParameterSetName -eq 'ValidateSet')
     {
         $Values = $ValidateSet
@@ -410,7 +410,7 @@ function New-xDscResourceProperty
     }
 
     $Property = New-Object "Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty" -Property $hash
-    
+
     return $Property
 }
 
@@ -503,12 +503,12 @@ function Test-PropertiesForResource
                         -ErrorId "NonUniqueNameError" -ErrorAction Stop
     }
     Write-Verbose $localizedData["NewResourceUniqueVerbose"]
-    
+
     return $true
 }
 
 <#
-.SYNOPSIS 
+.SYNOPSIS
 Creates a DscResource based on the given arguments.
 
 .DESCRIPTION
@@ -560,7 +560,7 @@ function New-xDscResource
         [System.String]
         $Path = ".",
 
-        
+
         [Parameter(
             Mandatory = $false,
             Position = 3)]
@@ -577,14 +577,14 @@ function New-xDscResource
         $Force
     )
 
-    
+
     $null = Test-AdministratorPrivileges
     Test-Name $Name "Resource"
     Write-Verbose $localizedData["NewResourceNameVerbose"]
 
-    $null = Test-PropertiesForResource $Property 
-    
-    # Check if the given path exists, if not create it. 
+    $null = Test-PropertiesForResource $Property
+
+    # Check if the given path exists, if not create it.
     if (-not (Test-Path $Path -PathType Container))
     {
         New-Item $Path -type Directory -ErrorVariable ev -ErrorAction SilentlyContinue
@@ -616,7 +616,7 @@ function New-xDscResource
             {
                 Write-Error ($localizedData.PathIsInvalidError -f $fullPath) `
                         -ErrorId "PathIsInvalidError" -ErrorAction Stop
-                
+
             }
             Write-Verbose $localizedData["NewModuleManifestPathVerbose"]
         }
@@ -650,7 +650,7 @@ function New-xDscResource
                         -ErrorId "PathIsInvalidError" -ErrorAction Stop
         }
     }
-    
+
     #New-DscManifest $Name $fullPath $ClassVersion -Force:$Force -ParentPSCmdlet $PSCmdlet -Confirm
 
     New-DscSchema $Name $fullPath $Property $ClassVersion -FriendlyName:$FriendlyName  -Force:$Force -ParentPSCmdlet $PSCmdlet -Confirm
@@ -747,7 +747,7 @@ function New-DscSchema
             Position = 3)]
         [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
-        
+
         [parameter(
             Mandatory,
             Position = 4)]
@@ -764,7 +764,7 @@ function New-DscSchema
 
         [System.Management.Automation.PSCmdlet]
         $ParentPSCmdlet = $PSCmdlet
-    )   
+    )
 
     $Schema = New-Object -TypeName System.Text.StringBuilder
 
@@ -792,7 +792,7 @@ function New-DscSchema
     {
         Write-Warning ($localizedData.SchemaNotOverWrittenWarning -f $SchemaPath)
     }
-    
+
 }
 
 # Given a type string (Uint8,...,Uint8[]...,Uint8Array) return the version without the "[]" or "Array" characters
@@ -814,7 +814,7 @@ function Get-TypeNameForSchema
     }
 
     $null = $Type -cmatch "^([a-zA-Z][\w_]*?)(\[\]|Array)?$"
-    
+
     return $Matches[1]
 }
 
@@ -850,7 +850,7 @@ function New-DscSchemaParameter
 
     Add-StringBuilderLine $SchemaEntry "[" -IndentCount 1 -Append
     Add-StringBuilderLine $SchemaEntry $Parameter.Attribute -Append
-    
+
     if ($EmbeddedInstances.ContainsKey($Parameter.Type))
     {
         Add-StringBuilderLine $SchemaEntry ", EmbeddedInstance(`"" -Append
@@ -885,7 +885,7 @@ function New-DscSchemaParameter
         Add-StringBuilderLine $SchemaEntry $CommaList -Append
         Add-StringBuilderLine $SchemaEntry "}" -Append
     }
-   
+
     Add-StringBuilderLine $SchemaEntry "] " -Append
 
     Add-StringBuilderLine $SchemaEntry (Get-TypeNameForSchema $Parameter.Type) -Append
@@ -937,7 +937,7 @@ function New-DelimitedList
         {
             Add-StringBuilderLine $CommaList $curItem -Append
         }
-            
+
 
         if($i -lt ($list.Count -1))
         {
@@ -958,7 +958,7 @@ function New-DscModule
             Position = 1)]
         [System.String]
         $Name,
-        
+
         [parameter(
             Mandatory = $true,
             Position = 2)]
@@ -970,24 +970,24 @@ function New-DscModule
             Position = 3)]
         [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters,
-        
+
         [Switch]
         $Force,
-        
+
         [System.Management.Automation.PSCmdlet]
         $ParentPSCmdlet = $PSCmdlet
     )
 
     $Module = New-Object -TypeName System.Text.StringBuilder
-    
+
     # Create a function Get-TargetResource
     #   Add all parameters with the Key or Required tags
     Add-StringBuilderLine $Module (New-GetTargetResourceFunction $Parameters)
-    
+
     # Create a function Set-TargetResource
     #    Add all parametes without the Read tag
     Add-StringBuilderLine $Module (New-SetTargetResourceFunction $Parameters)
-    
+
     # Create a function Test-TargetResource
     #    Add all parametes without the Read tag
     Add-StringBuilderLine $Module (New-TestTargetResourceFunction $Parameters)
@@ -995,7 +995,7 @@ function New-DscModule
     Add-StringBuilderLine $Module ("Export-ModuleMember -Function *-TargetResource")
 
     $ModulePath = Join-Path $Path ($Name + ".psm1")
-    
+
     $ModuleExists = Test-Path $ModulePath -PathType Leaf
 
     if (-not $ModuleExists -or $Force -or $ParentPSCmdlet.ShouldProcess($ModulePath, $localizedData.OverWriteModuleOperation))
@@ -1070,7 +1070,7 @@ function New-TestTargetResourceFunction
         -FunctionContent $functionContent
 }
 
-# Given a function name and a set of parameters, 
+# Given a function name and a set of parameters,
 #  returns a string representation of this function
 #  If given the ReturnValues, returns a hashtable consiting of these values
 function New-DscModuleFunction
@@ -1128,24 +1128,24 @@ function New-DscModuleFunction
         Add-StringBuilderLine  $Function (New-DscModuleParameter $Parameters[$i])
     }
 
-    #Because every function takes at least the key parameters, 
+    #Because every function takes at least the key parameters,
     # $Parameters is at least size 1
     Add-StringBuilderLine  $Function (New-DscModuleParameter $Parameters[$i] -Last)
 
     Add-StringBuilderLine  $Function     ")" -IndentCount 1
-    
+
     if ($FunctionContent) # If we are updating an already existing function
     {
         Add-StringBuilderLine $Function $FunctionContent -Append
     }
     else # Add some useful comments
     {
-        Add-StringBuilderLine  $Function 
+        Add-StringBuilderLine  $Function
 
         Add-StringBuilderLine $Function ("#Write-Verbose `"" + $localizedData.UsingWriteVerbose + "`"") -IndentCount 1
         Add-StringBuilderLine $Function
         Add-StringBuilderLine $Function ("#Write-Debug `"" + $localizedData.UsingWriteDebug + "`"") -IndentCount 1
-    
+
         if ($Name.Contains("Set-TargetResource"))
         {
             Add-StringBuilderLine $Function
@@ -1153,7 +1153,7 @@ function New-DscModuleFunction
             Add-StringBuilderLine $Function "#`$global:DSCMachineStatus = 1" -IndentCount 1
         }
 
-        Add-StringBuilderLine $Function 
+        Add-StringBuilderLine $Function
         Add-StringBuilderLine $Function
 
         if ($ReturnValues)
@@ -1175,9 +1175,9 @@ function New-DscModuleFunction
     Add-StringBuilderLine  $Function "}"
     if (-not $FunctionContent)
     {
-        Add-StringBuilderLine  $Function 
+        Add-StringBuilderLine  $Function
     }
-    
+
     return $Function.ToString()
 }
 
@@ -1197,7 +1197,7 @@ function New-DscModuleParameter
         [Switch]
         $Last
     )
-    
+
     $ParameterBuilder = New-Object -TypeName System.Text.StringBuilder
 
     if (([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Parameter.Attribute) `
@@ -1215,7 +1215,7 @@ function New-DscModuleParameter
         }
 
         $ValidateSetProperty = New-Object -TypeName System.Text.StringBuilder
-        
+
         Add-StringBuilderLine $ValidateSetProperty "[ValidateSet(" -IndentCount 2 -Append
 
         Add-StringBuilderLine $ValidateSetProperty `
@@ -1234,7 +1234,7 @@ function New-DscModuleParameter
 
     if (-not $Last)
     {
-        Add-StringBuilderLine $ParameterBuilder "," 
+        Add-StringBuilderLine $ParameterBuilder ","
     }
 
     return $ParameterBuilder.ToString()
@@ -1250,12 +1250,12 @@ function New-DscModuleReturn
         [Microsoft.PowerShell.xDesiredStateConfiguration.DscResourceProperty[]]
         $Parameters
     )
-    
+
     $HashTable = New-Object -TypeName System.Text.StringBuilder
 
     Add-StringBuilderLine $HashTable "<#" -IndentCount 1
     Add-StringBuilderLine $HashTable "`$returnValue = @{" -IndentCount 1
-    
+
     $Parameters | foreach {
 
         $HashTableEntry = New-Object -TypeName System.Text.StringBuilder
@@ -1268,7 +1268,7 @@ function New-DscModuleReturn
         Add-StringBuilderLine $HashTable $HashTableEntry.ToString()
 
     }
-    
+
     Add-StringBuilderLine $HashTable "}" -IndentCount 1
     Add-StringBuilderLine $HashTable
     Add-StringBuilderLine $HashTable "`$returnValue" -IndentCount 1
@@ -1278,7 +1278,7 @@ function New-DscModuleReturn
 }
 
 # Wrapper for StringBuilder.AppendLine that captures the returned StringBuilder object
-function Add-StringBuilderLine 
+function Add-StringBuilderLine
 {
     param
     (
@@ -1293,14 +1293,14 @@ function Add-StringBuilderLine
             Position = 2)]
         [System.String]
         $Line,
-        
+
         [parameter(
             Mandatory = $false,
             Position = 3
         )]
         [System.Int32]
         $IndentCount,
-        
+
         [parameter(
             Mandatory = $false,
             Position = 4
@@ -1317,13 +1317,13 @@ function Add-StringBuilderLine
     {
         $Line = '{0}{1}' -f ($IndentString * $IndentCount), $Line
     }
-        
+
     if ($Append)
     {
         $null = $Builder.Append($Line)
-        return     
+        return
     }
-   
+
     if ($Line)
     {
         $null = $Builder.AppendLine($Line)
@@ -1353,7 +1353,7 @@ function Get-FunctionParamLineNumbers
     )
 
     $functionLineNumbers = @{}
-    
+
     $contentString = [System.String]::Join([System.Environment]::NewLine, (Get-Content $modulePath))
 
     $parserErrors = @()
@@ -1377,26 +1377,26 @@ function Get-FunctionParamLineNumbers
     }
 
     $AST.FindAll({$args[0].GetType().Equals([System.Management.Automation.Language.FunctionDefinitionAst])},$false) | foreach {
-        
+
         if ($functionNames.Contains($_.Name))
         {
             $name = $_.Name
 
             $functionLineNumbers.Add($name, @())
             $functionLineNumbers[$name] += $_.Extent.StartLineNumber
-            
+
             #Check for a ParamBlock
             if ($_.Body.ParamBlock.Extent.EndLineNumber)
             {
                 $functionLineNumbers[$name] += $_.Body.ParamBlock.Extent.EndLineNumber
             }
             else
-            {   #If there is no param block, 
+            {   #If there is no param block,
                 # The function's content starts the line after the "{"
                 $functionLineNumbers[$name] += $_.Body.Extent.StartLineNumber + 1
             }
 
-            
+
             $functionLineNumbers[$name] += $_.Extent.EndLineNumber
         }
     }
@@ -1422,9 +1422,9 @@ function Get-ContentFromFunctions
     )
 
     $functionContent = @{}
-    
+
     $moduleLines = Get-Content $modulePath
-    
+
 
     foreach ($function in $functionLineNumbers.Keys)
     {
@@ -1463,7 +1463,7 @@ function Update-DscModule
 
         [Switch]
         $Force,
-        
+
         [System.Management.Automation.PSCmdlet]
         $ParentPSCmdlet = $PSCmdlet
     )
@@ -1482,14 +1482,14 @@ function Update-DscModule
     $functionName = "Get-TargetResource"
     $updatedFunctions.Add($functionName, `
         (New-GetTargetResourceFunction $Parameters -FunctionContent $functionContent[$functionName]))
-    
-    
+
+
     # Create a function Set-TargetResource
     #    Add all parametes without the Read tag
     $functionName = "Set-TargetResource"
     $updatedFunctions.Add($functionName, `
         (New-SetTargetResourceFunction $Parameters -FunctionContent $functionContent[$functionName]))
-    
+
     # Create a function Test-TargetResource
     #    Add all parametes without the Read tag
     $functionName = "Test-TargetResource"
@@ -1497,13 +1497,13 @@ function Update-DscModule
         (New-TestTargetResourceFunction $Parameters -FunctionContent $functionContent[$functionName]))
 
 
-    
+
     $sortedFunctionList = Get-SortedFunctionNames $functionLineNumbers
 
     $moduleLines = Get-Content $ModulePath
 
     $newModule = New-Object -TypeName System.Text.StringBuilder
-    
+
 
 
     #Start at the first line of the file
@@ -1554,7 +1554,7 @@ function Update-DscModule
 }
 
 <#
-.SYNOPSIS 
+.SYNOPSIS
 Update an existing DscResource based on the given arguments.
 
 .DESCRIPTION
@@ -1608,11 +1608,11 @@ function Update-xDscResource
         [Switch]
         $Force
     )
-    
-    
+
+
     $null = Test-AdministratorPrivileges
     # Will hold path to the .schema.mof file
-    $SchemaPath = "" 
+    $SchemaPath = ""
     # Will hold path to the .psm1 file
     $ModulePath = ""
 
@@ -1624,15 +1624,15 @@ function Update-xDscResource
     {
         $ModuleNameOrPath = $Path
     }
-    
+
     #Ignore the schema because we will be generating a new one regardless
     if (-not (Test-ResourcePath $ModuleNameOrPath ([ref]$SchemaPath) ([ref]$ModulePath) -IgnoreSchema))
     {
         return $false
     }
 
-    $null = Test-PropertiesForResource $Property 
-    
+    $null = Test-PropertiesForResource $Property
+
     $Name = [IO.Path]::GetFileNameWithoutExtension($ModuleNameOrPath)
 
     # The path to the folder containing the schema/module files
@@ -1669,7 +1669,7 @@ function Update-xDscResource
     {
         Write-Verbose $localizedData["NewResourceSuccessVerbose"]
     }
-    
+
 }
 
 #Line Numbers start at 1
@@ -1700,7 +1700,7 @@ function Get-SortedFunctionNames
         [System.Collections.Hashtable]
         $functionLineNumbers
     )
-    
+
     # Sort based on the starting line number of the function
     return ($functionLineNumbers.Keys | Sort-Object {$functionLineNumbers[$_][0]})
 }
@@ -1741,7 +1741,7 @@ function Test-ResourcePath
     $error = $false
 
     if (Test-Path -PathType Container $ModuleName)
-    {    
+    {
         $fileName = [IO.Path]::GetFileNameWithoutExtension($ModuleName)
 
         $Schema = Join-Path $ModuleName ($fileName + ".schema.mof")
@@ -1754,7 +1754,7 @@ function Test-ResourcePath
         if (-not $module)
         {
            Write-Error ($localizedData["ModuleNameNotFoundError"] -f $ModuleName) `
-            -ErrorId "ModuleNotFoundError" -ErrorAction Stop 
+            -ErrorId "ModuleNotFoundError" -ErrorAction Stop
         }
 
         $moduleFolder = [IO.Path]::GetDirectoryName($module.Path)
@@ -1770,7 +1770,7 @@ function Test-ResourcePath
             -ErrorId "SchemaNotFoundInDirectoryError" -ErrorAction Continue
         $error = $true
     }
-    
+
     if (-not (Test-Path -PathType Leaf $ResourceModule))
     {
         Write-Error ($localizedData["ModuleNotFoundInDirectoryError"] -f $ResourceModule) `
@@ -1783,17 +1783,17 @@ function Test-ResourcePath
     {
         return $false
     }
-    
+
     #Otherwise return the path to the files
     $SchemaRef.Value = $Schema
     $ResourceModuleRef.Value = $ResourceModule
 
     return $true
-    
+
 }
 
 <#
-.SYNOPSIS 
+.SYNOPSIS
 Determines if the given resource will work with the Dsc Engine.
 
 .DESCRIPTION
@@ -1801,7 +1801,7 @@ Finds and reports all errors in a given resource.
 
 .PARAMETER Name
 Either, a path to a directory containing a .psm1 and .schema.mof file,
-or the name of a module that includes a .psm1 and .schema.mof file. 
+or the name of a module that includes a .psm1 and .schema.mof file.
 
 .OUTPUTS
 System.Boolean. True if no errors were found, false otherwise.
@@ -1823,12 +1823,12 @@ function Test-xDscResource
         [System.String]
         $Name
     )
-    
+
     begin
     {
         $null = Test-AdministratorPrivileges
     }
-    
+
     process
     {
         # Will hold path to the .schema.mof file
@@ -1836,7 +1836,7 @@ function Test-xDscResource
         # Will hold path to the .psm1 file
         $ResourceModule = ""
 
-    
+
         if (-not (Test-ResourcePath $Name ([ref]$Schema) ([ref]$ResourceModule)))
         {
             return $false
@@ -1855,10 +1855,10 @@ function Test-xDscResource
         $TestCommandInfo = 0
 
         Write-Verbose $localizedData["TestResourceTestSchemaVerbose"]
-        $SchemaError = -not (Test-xDscSchemaInternal $Schema ([ref]$SchemaCimClass)) 
+        $SchemaError = -not (Test-xDscSchemaInternal $Schema ([ref]$SchemaCimClass))
 
         Write-Verbose $localizedData["TestResourceTestModuleVerbose"]
-        $ModuleError = -not (Test-DscResourceModule $ResourceModule ([ref]$GetCommandInfo) ([ref]$SetCommandInfo) ([ref]$TestCommandInfo)) 
+        $ModuleError = -not (Test-DscResourceModule $ResourceModule ([ref]$GetCommandInfo) ([ref]$SetCommandInfo) ([ref]$TestCommandInfo))
 
         if ($SchemaError -or $ModuleError)
         {
@@ -1870,7 +1870,7 @@ function Test-xDscResource
 
 
 
-        $DscResourceProperties = Convert-SchemaToResourceProperty $SchemaCimClass 
+        $DscResourceProperties = Convert-SchemaToResourceProperty $SchemaCimClass
 
 
         #Check get has all key and required and that they are mandatory
@@ -1926,7 +1926,7 @@ function Test-GetKeyRequiredMandatory
         {
             $errorId = "GetMissingKeyOrRequiredError"
             Write-Error ($localizedData[$errorId] -f $property.Name) `
-                -ErrorId $errorId -ErrorAction Continue 
+                -ErrorId $errorId -ErrorAction Continue
 
             $errorIds += $errorId
         }
@@ -1969,20 +1969,20 @@ function Test-SetHasExactlyAllNonReadProperties
     #Make sure each NonRead Property is represented in the function
     foreach ($property in $NonReadDscResourceProperties)
     {
-        
+
         if (-not $SetParameters[$property.Name] -or `
                 -not (Test-ParameterMetaDataIsDscResourceProperty $SetParameters[$property.Name] $property))
         {
             $errorId = "SetAndTestMissingParameterError"
             Write-Error ($localizedData[$errorId] -f $property.Name) `
-                -ErrorId $errorId -ErrorAction Continue 
+                -ErrorId $errorId -ErrorAction Continue
 
             $errorIds += $errorId
         }
 
         $propertiesHash.Add($property.Name,$true)
     }
-       
+
     #Make sure there are no extra properties in the function
     foreach ($parameter in $SetParameters.Values)
     {
@@ -1990,7 +1990,7 @@ function Test-SetHasExactlyAllNonReadProperties
         {
             $errorId = "SetAndTestExtraParameterError"
             Write-Error ($localizedData[$errorId] -f $parameter.Name) `
-                -ErrorId $errorId -ErrorAction Continue 
+                -ErrorId $errorId -ErrorAction Continue
 
             $errorIds += $errorId
         }
@@ -2038,14 +2038,14 @@ function Test-FunctionTakesNoReads
             {
                 $errorId = "GetTakesReadError"
                 Write-Error ($localizedData[$errorId] -f $property.Name) `
-                    -ErrorId $errorId -ErrorAction Continue 
+                    -ErrorId $errorId -ErrorAction Continue
             }
             else
             {
                 $errorId = "SetTestTakeReadError"
                 Write-Error ($localizedData[$errorId] -f $property.Name) `
-                    -ErrorId $errorId -ErrorAction Continue 
-            }   
+                    -ErrorId $errorId -ErrorAction Continue
+            }
 
             $errorIds += $errorId
         }
@@ -2089,7 +2089,7 @@ function Test-ParameterMetaDataIsDscResourceProperty
     {
         $errorId = "SchemaModuleReadError"
         Write-Error ($localizedData[$errorId] -f $property.Name) `
-            -ErrorId $errorId -ErrorAction Continue 
+            -ErrorId $errorId -ErrorAction Continue
         if($errorIdRef)
         {
             $errorIdRef.Value = $errorId
@@ -2101,7 +2101,7 @@ function Test-ParameterMetaDataIsDscResourceProperty
     {
         $errorId = "SchemaModuleAttributeError"
         Write-Error ($localizedData[$errorId] -f $property.Name) `
-            -ErrorId $errorId -ErrorAction Continue 
+            -ErrorId $errorId -ErrorAction Continue
         if($errorIdRef)
         {
             $errorIdRef.Value = $errorId
@@ -2120,7 +2120,7 @@ function Test-ParameterMetaDataIsDscResourceProperty
     {
         $errorId = "SchemaModuleTypeError"
         Write-Error ($localizedData[$errorId] -f $property.Name) `
-            -ErrorId $errorId -ErrorAction Continue 
+            -ErrorId $errorId -ErrorAction Continue
         if($errorIdRef)
         {
             $errorIdRef.Value = $errorId
@@ -2170,7 +2170,7 @@ function Test-ParameterMetaDataIsDscResourceProperty
     {
         $errorId = "SchemaModuleValidateSetDiscrepancyError"
         Write-Error ($localizedData[$errorId] -f $property.Name) `
-            -ErrorId $errorId -ErrorAction Continue 
+            -ErrorId $errorId -ErrorAction Continue
         if($errorIdRef)
         {
             $errorIdRef.Value = $errorId
@@ -2193,21 +2193,21 @@ function Test-ParameterMetaDataIsDscResourceProperty
         {
             $errorId = "SchemaModuleValidateSetCountError"
             Write-Error ($localizedData[$errorId] -f $property.Name) `
-                -ErrorId $errorId -ErrorAction Continue 
+                -ErrorId $errorId -ErrorAction Continue
             if($errorIdRef)
             {
                 $errorIdRef.Value = $errorId
             }
             return $false
         }
-        
+
         foreach ($item in $set)
         {
             if (-not $parameterValidateSet.Contains($item))
             {
                 $errorId = "SchemaModuleValidateSetItemError"
                 Write-Error ($localizedData[$errorId] -f $property.Name,$item.ToString()) `
-                    -ErrorId $errorId -ErrorAction Continue 
+                    -ErrorId $errorId -ErrorAction Continue
                 if($errorIdRef)
                 {
                     $errorIdRef.Value = $errorId
@@ -2294,7 +2294,7 @@ function Test-SchemaProperty
         $errorId = "UnsupportedMofTypeError"
         Write-Error ($localizedData[$errorId] -f $CimProperty.Name,$CimProperty.CimType.ToString()) `
             -ErrorId $errorId -ErrorAction Continue
-        $ErrorIdsRef.Value +=  $errorId 
+        $ErrorIdsRef.Value +=  $errorId
     }
     else
     {
@@ -2351,7 +2351,7 @@ function Test-SchemaProperty
             $errorId = "ValueMapValuesPairError"
             Write-Error ($localizedData[$errorId] -f ($CimProperty.Name)) `
                 -ErrorId $errorId -ErrorAction Continue
-            $ErrorIdsRef.Value +=  $errorId 
+            $ErrorIdsRef.Value +=  $errorId
         }
     }
 
@@ -2396,7 +2396,7 @@ function Test-MockSchema
     try
     {
         # Returns full path to a 0 byte .tmp file
-        $tempFilePath = [IO.Path]::GetTempFileName() 
+        $tempFilePath = [IO.Path]::GetTempFileName()
 
         $tempFolderPath = [IO.Path]::GetDirectoryName($tempFilePath)
 
@@ -2420,7 +2420,7 @@ function Test-MockSchema
 
         Get-Content $Schema | % {
             $newLine = $_
-    
+
             # Match to grab class name without grabbing ": OMI_BaseResource"
             # \w - is the current regex for class names
             if ($_ -cmatch "^class\s+([\w-&\(\)\[\]]+)\s*:?")
@@ -2463,18 +2463,18 @@ function Test-MockSchema
             }
             return ($errorIds.Length -eq 0)
         }
-    
+
         $parseResult = &$mofcomp -N:root\microsoft\windows\DesiredStateConfiguration -class:forceupdate $newSchemaPath
-    
+
         # This shouldn't happen because mofcomp.exe -check is run previously
         if ($LASTEXITCODE -ne 0)
         {
             $errorIds = @()
             $errorId = "SchemaParseError"
-        
+
 
             $parseText = New-Object -TypeName System.Text.StringBuilder
-        
+
             $parseResult | % {
                 Add-StringBuilderLine $parseText $_
             }
@@ -2482,7 +2482,7 @@ function Test-MockSchema
             Write-Error ($parseText.ToString()) `
                             -ErrorId $errorId -ErrorAction Continue
             $errorIds += $errorId
-        
+
             if ($errorIdsRef)
             {
                 $errorIdsRef.Value = $errorIds
@@ -2497,8 +2497,8 @@ function Test-MockSchema
         {
             $errorIds = @()
             $errorId = "GetCimClass-Error"
-       
-            # Let Get-CimClass display its error, then report the error 
+
+            # Let Get-CimClass display its error, then report the error
 
             Write-Error ($localizedData[$errorId] -f $schemaName) `
                -ErrorId $errorId -ErrorAction Continue
@@ -2512,7 +2512,7 @@ function Test-MockSchema
         }
 
         $hasKey = $false
-    
+
         $errorIds = @()
 
         $SchemaCimClass.Value.CimClassProperties | % {
@@ -2520,13 +2520,13 @@ function Test-MockSchema
             $null = Test-SchemaProperty $_ ([ref]$hasKey) ([ref]$errorIds)
 
         }
-    
+
         if (-not $hasKey)
         {
             $errorId = "NoKeyTestError"
             Write-Error ($localizedData[$errorId]) `
                 -ErrorId $errorId -ErrorAction Continue
-            $errorIds += $errorId 
+            $errorIds += $errorId
         }
 
         if ($errorIdsRef)
@@ -2577,7 +2577,7 @@ function Test-xDscSchemaEncoding
         {
             Write-Verbose $localizedData["SchemaFileReEncodingVerbose"]
 
-            $schemaContent = Get-Content $Schema 
+            $schemaContent = Get-Content $Schema
             $schemaContent | Out-File -Encoding unicode $Schema -Force
         }
         #Otherwise fail
@@ -2650,13 +2650,13 @@ function Test-xDscSchemaInternal
         $errorId = "BadSchemaPath"
         Write-Error ($localizedData[$errorId]) `
                         -ErrorId $errorId -ErrorAction Continue
-        
+
         if ($errorIdsRef)
         {
             $errorIdsRef.Value = @()
             $errorIdsRef.Value += $errorId
         }
-        
+
         return $false
     }
     Write-Verbose ($localizedData["SchemaPathValidVerbose"])
@@ -2668,17 +2668,17 @@ function Test-xDscSchemaInternal
 
     $filename = [IO.Path]::GetFileName($Schema)
     $null = $filename -cmatch "^(.*)\.schema\.mof$"
-    $SchemaName = $Matches[1] 
+    $SchemaName = $Matches[1]
 
     $parseResult = &$mofcomp -Check $Schema
-     
+
     if ($LASTEXITCODE -ne 0)
     {
         $errorIds = @()
         $errorId = "SchemaParseError"
 
         $parseText = New-Object -TypeName System.Text.StringBuilder
-        
+
         $parseResult | % {
             Add-StringBuilderLine $parseText $_
         }
@@ -2695,7 +2695,7 @@ function Test-xDscSchemaInternal
         }
         return $false
     }
- 
+
     Write-Verbose ($localizedData["SchemaMofCompCheckVerbose"])
 
     # If used just to test the schema, they don't need the cimClass
@@ -2762,7 +2762,7 @@ function Test-DscResourceModule
 
             Write-Error ($localizedData[$errorId]) `
                             -ErrorId $errorId -ErrorAction Continue
-            $errorIds += $errorId 
+            $errorIds += $errorId
 
             if ($errorIdsRef)
             {
@@ -2776,7 +2776,7 @@ function Test-DscResourceModule
         $Prefix = [IO.Path]::GetRandomFileName()
 
         $ev = $null
-    
+
         $moduleInfo = Import-Module $Module -Prefix $Prefix -Force -NoClobber -PassThru -ErrorVariable ev -ErrorAction Continue
 
         if ($ev)
@@ -2794,32 +2794,32 @@ function Test-DscResourceModule
             return $false
         }
 
-    
-    
-        $undefinedFunctions = @() 
+
+
+        $undefinedFunctions = @()
 
         $ev = $null
-    
+
         $GetCommandInfo.Value = Get-Command ("Get-" + $Prefix + "TargetResource") -Module $ModuleName -ErrorAction SilentlyContinue -ErrorVariable ev
-    
+
         if ($GetCommandInfo.Value -eq $null -or $ev)
         {
             $undefinedFunctions += "Get-TargetResource"
         }
 
         $ev = $null
-    
+
         $SetCommandInfo.Value = Get-Command ("Set-" + $Prefix + "TargetResource") -Module $ModuleName -ErrorAction SilentlyContinue -ErrorVariable ev
-    
+
         if ($SetCommandInfo.Value -eq $null -or $ev)
         {
             $undefinedFunctions += "Set-TargetResource"
         }
 
         $ev = $null
-    
+
         $TestCommandInfo.Value = Get-Command ("Test-" + $Prefix + "TargetResource") -Module $ModuleName -ErrorAction SilentlyContinue -ErrorVariable ev
-    
+
         if ($TestCommandInfo.Value -eq $null -or $ev)
         {
             $undefinedFunctions += "Test-TargetResource"
@@ -2846,7 +2846,7 @@ function Test-DscResourceModule
         {
             Write-Warning $localizedData["GetTargetResourceOutWarning"]
         }
-   
+
         if ($GetCommandInfo.Value.OutputType -and $GetCommandInfo.Value.OutputType.Type -ne [Hashtable])
         {
             $errorId = "GetTargetResourceOutError"
@@ -2890,7 +2890,7 @@ function Test-DscResourceModule
         $null = Test-BasicDscFunction $TestCommandInfo.Value "Test-TargetResource" -errorIdsRef ([ref]$testErrors)
         $errorIds += $testErrors
 
-    
+
         # Set == Test
 
         $setTestErrors = @()
@@ -2962,8 +2962,8 @@ function Test-GetSubsetSet
                 # We can't report that Set doesnt contain $commonParameter X
                 # because neither function actually "contains" it
                 # It indicates an error elsewhere though
-                # so we'll make sure an error is reported. 
-                $commonParameterError = $true   
+                # so we'll make sure an error is reported.
+                $commonParameterError = $true
             }
             else
             {
@@ -2975,16 +2975,16 @@ function Test-GetSubsetSet
 
             continue;
         }
-        
+
         $identicalParametersErrors = @()
 
         $null = Test-ParametersAreIdentical `
                         $parameter "Get-TargetResource" `
                         $setCommandInfo.Parameters[$parameter.Name] "Set-TargetResource" `
                         -errorIdsRef ([ref]$identicalParametersErrors)
-        
+
         $errorIds += $identicalParametersErrors
-        
+
     }
 
     #Report the top level rule about all Get Parameters
@@ -3036,9 +3036,9 @@ function Test-ParametersAreIdentical
         [ref]
         $errorIdsRef
     )
-    
+
     $errorIds = @()
-    
+
     if (-not (Test-ParametersValidateSet $parameterA $parameterB))
     {
         $errorId = "ModuleValidateSetError"
@@ -3047,8 +3047,8 @@ function Test-ParametersAreIdentical
         $errorIds += $errorId
 
     }
-        
-    
+
+
 
     if ((Test-ParameterIsMandatory $parameterA) -xor (Test-ParameterIsMandatory $parameterB))
     {
@@ -3057,7 +3057,7 @@ function Test-ParametersAreIdentical
                 -ErrorId $errorId -ErrorAction Continue
         $errorIds += $errorId
     }
-        
+
     if ($parameterA.ParameterType -ne $parameterB.ParameterType)
     {
         $errorId = "ModuleTypeError"
@@ -3113,18 +3113,18 @@ function Test-ParametersValidateSet
         $parameter2
     )
 
-    
+
     $a = Get-ValidateSet $parameter1
     $b = Get-ValidateSet $parameter2
 
-    
+
     if ((-not $a) -and (-not $b))
     {
         return $true
     }
     elseif ($a -and $b)
     {
-        
+
 
         if ($a.Count -ne $b.Count)
         {
@@ -3195,7 +3195,7 @@ function Test-BasicDscFunction
 
     $metadata = [System.Management.Automation.CommandMetadata]$command
 
-    # This would be a mandatory, non-array parameter 
+    # This would be a mandatory, non-array parameter
     $hasValidKey = $false
 
     foreach ($parameter in $command.Parameters.Values)
@@ -3270,7 +3270,7 @@ function Test-SetTestIdentical
     )
 
     $errorId = "NoError"
-    
+
     $setCommandMetadata = [System.Management.Automation.CommandMetadata]$setCommand
     $testCommandMetadata = [System.Management.Automation.CommandMetadata]$testCommand
 
@@ -3281,20 +3281,20 @@ function Test-SetTestIdentical
     {
         #This will already have been reported by Test-BasicDscFunction
         $errorId = "NoKeyPropertyError"
-        
+
         if($errorIdsRef)
         {
             $errorIdsRef.Value = @()
             $errorIdsRef.Value += $errorId
         }
-        
+
 
         return $false
     }
-    
+
     #  We can assume that if somebody took time to write a parameter
     #   that is only in one function,
-    #   than it is more likely that they forgot to add it to the other, 
+    #   than it is more likely that they forgot to add it to the other,
     #   rather than that it was mistakenly included.
     # So check the function with more parameters first.
 
@@ -3341,7 +3341,7 @@ function Test-SetTestIdentical
         }
     }
 
-    
+
     if ($setParametersToTest.Count -ne $testParametersToTest.Count -and -not $errorReported)
     {
         # if the counts are different but we didnt get an error, something is wrong...
@@ -3358,7 +3358,7 @@ function Test-SetTestIdentical
             -ErrorId $errorId -ErrorAction Continue
         $errorIds += $errorId
     }
-    
+
     if($errorIdsRef)
     {
         $errorIdsRef.Value = $errorIds
