@@ -52,8 +52,9 @@ These uses of these functions are given below.
 
 ## Versions
 
-### Unreleased
+### 1.6.0.0
 
+* Formatting changes
 
 ### 1.5.0.0
 
