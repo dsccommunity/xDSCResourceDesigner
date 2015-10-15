@@ -54,6 +54,9 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+### 1.6.0.0
+
+* Fixed issue with not being able to import the module twice
 
 ### 1.5.0.0
 
