@@ -5,7 +5,7 @@ data LocalizedData
 ConvertFrom-StringData @'
 ModuleParsingError=There was an error parsing the module file {0}
 SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to Unicode?
-SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supporte in GIT.)
+SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supported in GIT.)
 SchemaFileReEncodingVerbose=Re-encoding the schema file in Unicode.
 SchemaModuleReadError=Property {0} declared as Read in the schema, cannot be a parameter in the module.
 SchemaModuleAttributeError=Property {0} has a different attribute in the schema than in the module.
