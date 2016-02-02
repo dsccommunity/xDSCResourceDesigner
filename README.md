@@ -1,4 +1,4 @@
-ï»¿[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
 
 # xDSCResourceDesigner
 
@@ -53,6 +53,8 @@ These uses of these functions are given below.
 ## Versions
 
 ### Unreleased
+
+### 1.7.0.0
 
 ### 1.6.0.0
 
@@ -112,7 +114,7 @@ Password: Password of the user.
 Can be used to update an existing user password.
 DomainAdminstratorCredential: Credential of the Domain Administrator in which user account will be created.
 Ensure: Whether an user account should be created or deleted.
-This can only take two values: â€˜Presentâ€™ and â€˜Absentâ€™.
+This can only take two values: ‘Present’ and ‘Absent’.
 #>
 
 $UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
