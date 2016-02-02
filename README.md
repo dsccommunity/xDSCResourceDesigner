@@ -1,4 +1,4 @@
-﻿[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
 
 # xDSCResourceDesigner
 
@@ -53,6 +53,8 @@ These uses of these functions are given below.
 ## Versions
 
 ### Unreleased
+
+### 1.7.0.0
 
 ### 1.6.0.0
 
@@ -112,36 +114,13 @@ Password: Password of the user.
 Can be used to update an existing user password.
 DomainAdminstratorCredential: Credential of the Domain Administrator in which user account will be created.
 Ensure: Whether an user account should be created or deleted.
-This can only take two values: ‘Present’ and ‘Absent’.
+This can only take two values: �Present� and �Absent�.
 #>
 
 $UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
 $Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write
 $DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write
 $Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"
-#Now create the resource
-New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'
-
-<#
-Create a ADUser DSC Resource with following properties
-UserName: Name of the ADUser.
-This is a  key property for the resource that uniquely identify an instance.
-
-Password: Password of the user.
-Can be used to update an existing user password.
-
-DomainAdminstratorCredential: Credential of the Domain Administrator in which user account will be created.
-
-Ensure: Whether an user account should be created or deleted.
-This can only take two values: ‘Present’ and ‘Absent’.
-
-#>
-
-$UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
-$Password = New-xDscResourceProperty -Name Password -Type PSCredential -Attribute Write
-$DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential -Type PSCredential -Attribute Write
-$Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"
-
 #Now create the resource
 New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'
 

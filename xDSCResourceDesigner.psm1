@@ -5,7 +5,7 @@ data LocalizedData
 ConvertFrom-StringData @'
 ModuleParsingError=There was an error parsing the module file {0}
 SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to Unicode?
-SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII.
+SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supported in GIT.)
 SchemaFileReEncodingVerbose=Re-encoding the schema file in Unicode.
 SchemaModuleReadError=Property {0} declared as Read in the schema, cannot be a parameter in the module.
 SchemaModuleAttributeError=Property {0} has a different attribute in the schema than in the module.
@@ -2548,6 +2548,21 @@ function Test-MockSchema
     }
 }
 
+# test if we are running in a test harness
+function Test-TestHarness
+{
+    [CmdletBinding()]
+    param
+    ()
+    
+    if ($env:APPVEYOR) 
+    {
+        return $true
+    }
+    
+    return $false
+}
+
 # Given the path to a Schema.Mof file, check to see if has the BOM for UTF8
 # If so, give the option to re-encode it for them or throw error
 # Otherwise, return true
@@ -2573,7 +2588,7 @@ function Test-xDscSchemaEncoding
         -and ($schemaBytes[2] -eq 191))
     {
         #Prompt the user to re-encode their schema as Unicode...
-        if ($pscmdlet.ShouldProcess($Schema, $localizedData["SchemaEncodingNotSupportedPrompt"]))
+        if (!(Test-TestHarness) -and $pscmdlet.ShouldProcess($Schema, $localizedData["SchemaEncodingNotSupportedPrompt"]))
         {
             Write-Verbose $localizedData["SchemaFileReEncodingVerbose"]
 
