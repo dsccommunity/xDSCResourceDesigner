@@ -54,6 +54,8 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+* Fixed issue where ValueMap on an Array was incorrectly flagged as an error
+
 ### 1.7.0.0
 
 * Error message improvements
