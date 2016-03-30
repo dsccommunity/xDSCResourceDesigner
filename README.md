@@ -54,7 +54,13 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+### 1.8.0.0
+
+* Fixed issue where ValueMap on an Array was incorrectly flagged as an error
+
 ### 1.7.0.0
+
+* Error message improvements
 
 ### 1.6.0.0
 
@@ -114,7 +120,7 @@ Password: Password of the user.
 Can be used to update an existing user password.
 DomainAdminstratorCredential: Credential of the Domain Administrator in which user account will be created.
 Ensure: Whether an user account should be created or deleted.
-This can only take two values: ‘Present’ and ‘Absent’.
+This can only take two values: â€˜Presentâ€™ and â€˜Absentâ€™.
 #>
 
 $UserName = New-xDscResourceProperty -Name UserName -Type String -Attribute Key
