@@ -870,7 +870,7 @@ function New-DscSchemaParameter
     {
         Add-StringBuilderLine $SchemaEntry ", ValueMap{" -Append
 
-        $CommaList = New-DelimitedList $Parameter.ValueMap -String:($Parameter.Type -eq "String")
+        $CommaList = New-DelimitedList $Parameter.ValueMap -String:($Parameter.Type -eq "String" -or $Parameter.Type -eq "String[]")
 
         Add-StringBuilderLine $SchemaEntry $CommaList -Append
         Add-StringBuilderLine $SchemaEntry "}" -Append
@@ -1219,7 +1219,7 @@ function New-DscModuleParameter
         Add-StringBuilderLine $ValidateSetProperty "[ValidateSet(" -IndentCount 2 -Append
 
         Add-StringBuilderLine $ValidateSetProperty `
-            (New-DelimitedList $set -String:($Parameter.Type -eq "String")) -Append
+            (New-DelimitedList $set -String:($Parameter.Type -eq "String" -or $Parameter.Type -eq "String[]")) -Append
 
         Add-StringBuilderLine $ValidateSetProperty ")]" -Append
 
