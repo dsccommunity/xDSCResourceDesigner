@@ -54,6 +54,10 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+### 1.9.0.0
+
+* Fixed issue where using ValidateSet with type string[] would throw an error
+
 ### 1.8.0.0
 
 * Fixed issue where ValueMap on an Array was incorrectly flagged as an error
