@@ -1,6 +1,6 @@
 @{
 # Version number of this module.
-ModuleVersion = '1.8.0.0'
+ModuleVersion = '1.9.0.0'
 
 # ID used to uniquely identify this module
 GUID = '74951b31-1aa5-472b-9109-738de1bca38f'
@@ -55,7 +55,9 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = '* Fixed issue where using ValidateSet with type string[] would throw an error
+
+'
 
     } # End of PSData hashtable
 
