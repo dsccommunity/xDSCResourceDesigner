@@ -7,7 +7,10 @@ The **xDSCResourceDesigner** module is a part of the Windows PowerShell Desired 
 **All of the functions/cmdlets in the Resource Designer Tool are provided AS IS, and are not supported through any Microsoft standard support program or service.
 The "x" in xDSCResourceDesigner stands for experimental**, which means that this tool will be **fix forward** and monitored by the module owner(s).
 
-Please leave comments, feature requests, and bug reports in the Q &amp; A tab for this module.
+Please leave comments, feature requests, and bug reports in the Issues tab for this module.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 If you would like to modify **xDSCResourceDesigner** module, feel free.
 When modifying, please update the module name and the function names (instructions below).
