@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
+﻿[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
 
 # xDSCResourceDesigner
 
@@ -59,6 +59,7 @@ These uses of these functions are given below.
 ## Versions
 
 ### Unreleased
+* Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
 
 ### 1.9.0.0
 
