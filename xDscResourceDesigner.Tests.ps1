@@ -44,6 +44,18 @@ end
                 $result | Should Be $true
             }
         }
+
+        Context 'A resource with both required files, but schema mof has encoding UTF8 BOM' {
+            Setup -Dir TestResource
+            Setup -File TestResource\TestResource.psm1 -Content (Get-TestDscResourceModuleContent)
+            Get-TestDscResourceSchemaContent |
+                Out-File -Encoding utf8 -FilePath (Join-Path -Path $TestDrive -ChildPath 'TestResource\TestResource.schema.mof') -Force
+
+            It 'Should write out the correct error to console, and pass the test' {
+                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $result | Should Be $false
+            }
+        }
     }
 
     Describe New-xDscResourceProperty {
