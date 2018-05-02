@@ -59,6 +59,8 @@ These uses of these functions are given below.
 ## Versions
 
 ### Unreleased
+
+### 1.10.0.0
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
 * Helper function Test-xDscSchemaEncoding now supports PowerShell Core (issue #64).
 * Changed README.md encoding to UTF8.

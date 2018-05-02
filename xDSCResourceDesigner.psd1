@@ -1,6 +1,6 @@
 @{
 # Version number of this module.
-ModuleVersion = '1.9.0.0'
+moduleVersion = '1.10.0.0'
 
 # ID used to uniquely identify this module
 GUID = '74951b31-1aa5-472b-9109-738de1bca38f'
@@ -55,7 +55,9 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '* Fixed issue where using ValidateSet with type string[] would throw an error
+        ReleaseNotes = '* Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
+* Helper function Test-xDscSchemaEncoding now supports PowerShell Core (issue 64).
+* Changed README.md encoding to UTF8.
 
 '
 
@@ -63,4 +65,5 @@ PrivateData = @{
 
 } # End of PrivateData hashtable
 }
+
 
