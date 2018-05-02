@@ -44,6 +44,26 @@ end
                 $result | Should Be $true
             }
         }
+
+        Context 'A resource with both required files, but schema mof has encoding UTF8 BOM' {
+            BeforeAll {
+                Mock -CommandName 'Write-Error' -ModuleName 'xDscResourceDesigner'
+            }
+
+            Setup -Dir TestResource
+            Setup -File TestResource\TestResource.psm1 -Content (Get-TestDscResourceModuleContent)
+            Get-TestDscResourceSchemaContent |
+                Out-File -Encoding utf8 -FilePath (Join-Path -Path $TestDrive -ChildPath 'TestResource\TestResource.schema.mof') -Force
+
+            It 'Should write out the correct error to console, and return $false' {
+                $result = Test-xDscResource -Name $TestDrive\TestResource
+                $result | Should Be $false
+
+                Assert-MockCalled -CommandName 'Write-Error' -ParameterFilter {
+                    $message -eq 'The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supported in GIT.)'
+                } -Exactly -Times 1 -ModuleName 'xDscResourceDesigner'
+            }
+        }
     }
 
     Describe New-xDscResourceProperty {
