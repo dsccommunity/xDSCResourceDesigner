@@ -2554,12 +2554,12 @@ function Test-TestHarness
     [CmdletBinding()]
     param
     ()
-    
-    if ($env:APPVEYOR) 
+
+    if ($env:APPVEYOR)
     {
         return $true
     }
-    
+
     return $false
 }
 
@@ -2578,7 +2578,21 @@ function Test-xDscSchemaEncoding
         $Schema
     )
 
-    $schemaBytes = Get-Content -Encoding Byte $Schema
+    $getContentParameters = @{
+        Path = $Schema
+    }
+
+    # Need to treat Windows Powershell and PowerShell Core different.
+    if ($PSVersionTable.PSEdition -eq 'Core')
+    {
+        $getContentParameters['AsByteStream'] = $true
+    }
+    else
+    {
+        $getContentParameters['Encoding'] = 'Byte'
+    }
+
+    $schemaBytes = Get-Content @getContentParameters
 
     # These are the UTF8 Byte Order Marks as read by PowerShell's Get-Content -Encoding Byte
     # [System.Text.Encoding]::UTF8.GetPreamble()
