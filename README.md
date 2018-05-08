@@ -60,6 +60,10 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+* Fix Test-xDscSchema failing to call `Remove-WmiObject` on PowerShell Core.
+  As a workaround `Remove-WmiObject` is now called through Windows PowerShell on
+  PowerShell Core (issue #67).
+
 ### 1.10.0.0
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
 * Helper function Test-xDscSchemaEncoding now supports PowerShell Core (issue #64).
