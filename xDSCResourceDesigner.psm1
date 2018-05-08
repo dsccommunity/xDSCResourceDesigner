@@ -2538,13 +2538,62 @@ function Test-MockSchema
     finally{
         if ($newSchemaName)
         {
-            Remove-WmiObject -Class $newSchemaName -Namespace root\microsoft\windows\DesiredStateConfiguration -ErrorAction Ignore
+            Remove-DscCimClass -ClassName $newSchemaName -ErrorAction SilentlyContinue
         }
 
         if ($newSchemaPath)
         {
             Remove-Item $newSchemaPath -ErrorAction Ignore
         }
+    }
+}
+
+<#
+    .SYNOPSIS
+        Removes a CIM class.
+
+    .PARAMETER SchemaName
+        String containing the schema name that should be removed.
+
+    .PARAMETER Namespace
+        String containing the path to the namespace. The default value is
+        'root\microsoft\windows\DesiredStateConfiguration'.
+
+    .NOTES
+        This is a wrapper to workaround that Remove-CimClass does not
+        exist on PowerShell Core. Neither there are a .NET Core method
+        to use to remove a CIM class. The workaround is to use WMF
+        to call the Remove-WMIObject.
+#>
+function Remove-DscCimClass
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $ClassName,
+
+        [Parameter()]
+        [System.String]
+        $Namespace = 'root\microsoft\windows\DesiredStateConfiguration'
+    )
+
+    <#
+        Build the command that will remove the CIM class on either
+        Windows PowerShell or PowerShell Core.
+    #>
+    $removeWmiObjectCommand = "Remove-WmiObject -Class '{0}' -Namespace '{1}' -ErrorAction '{2}'" -f $ClassName, $Namespace, $ErrorActionPreference
+
+    # Need to treat Windows Powershell and PowerShell Core different.
+    if ($PSVersionTable.PSEdition -eq 'Core')
+    {
+        #$removeWmiObjectCommand = '& {0}' -f $removeWmiObjectCommand
+        powershell.exe -ExecutionPolicy ByPass -NonInteractive -NoProfile -Command $removeWmiObjectCommand
+    }
+    else
+    {
+        Invoke-Expression -Command $removeWmiObjectCommand
     }
 }
 

@@ -195,6 +195,46 @@ end
 
             }
         }
+
+        Describe 'Remove-DscCimClass' {
+            Context 'When calling from PowerShell Core' {
+                BeforeAll {
+                    # Mock PowerShell Core by changing the variable temporary-
+                    $script:previousPowerShellEdition = $PSVersionTable.PSEdition
+                    $PSVersionTable.PSEdition = 'Core'
+
+                    function powershell.exe
+                    {
+                    }
+
+                    Mock -CommandName 'powershell.exe'
+                    Mock -CommandName 'Invoke-Expression'
+                }
+
+                AfterAll {
+                    $PSVersionTable.PSEdition = $script:previousPowerShellEdition
+                }
+
+                It 'Should call through Windows PowerShell to remove the CIM class' {
+                    { Remove-DscCimClass -ClassName 'Dummy' -ErrorAction 'SilentlyContinue' } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName 'powershell.exe' -Exactly -Times 1
+                    Assert-MockCalled -CommandName 'Invoke-Expression' -Exactly -Times 0
+                }
+            }
+
+            Context 'When calling from Windows PowerShell' {
+                BeforeAll {
+                    Mock -CommandName 'Invoke-Expression'
+                }
+
+                It 'Should call Invoke-Expression to remove the CIM class' {
+                    { Remove-DscCimClass -ClassName 'Dummy' -ErrorAction 'SilentlyContinue' } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName 'Invoke-Expression' -Exactly -Times 1
+                }
+            }
+        }
     }
 }
 
