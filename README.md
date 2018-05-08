@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xdscresourcedesigner/branch/master)
-
 # xDSCResourceDesigner
 
 The **xDSCResourceDesigner** module is a part of the Windows PowerShell Desired State Configuration (DSC) Resource Kit, which is a tool to author PowerShell DSC Resources and produced by the PowerShell Team.This tool makes writing resources a breeze and ensure that all the rules which a DSC resource must conform to are met.
@@ -11,6 +9,28 @@ Please leave comments, feature requests, and bug reports in the Issues tab for t
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Branches
+
+### master
+
+[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/xDSCResourceDesigner/branch/master)
+[![codecov](https://codecov.io/gh/PowerShell/xDSCResourceDesigner/branch/master/graph/badge.svg)](https://codecov.io/gh/PowerShell/xDSCResourceDesigner/branch/master)
+
+This is the branch containing the latest release -
+no contributions should be made directly to this branch.
+
+### dev
+
+[![Build status](https://ci.appveyor.com/api/projects/status/a98sv7wqd9trdc41/branch/dev?svg=true)](https://ci.appveyor.com/project/PowerShell/SqlServerDsc/branch/dev)
+[![codecov](https://codecov.io/gh/PowerShell/xDSCResourceDesigner/branch/dev/graph/badge.svg)](https://codecov.io/gh/PowerShell/xDSCResourceDesigner/branch/dev)
+
+This is the development branch
+to which contributions should be proposed by contributors as pull requests.
+This development branch will periodically be merged to the master branch,
+and be released to [PowerShell Gallery](https://www.powershellgallery.com/).
+
+## Contributing
 
 If you would like to modify **xDSCResourceDesigner** module, feel free.
 When modifying, please update the module name and the function names (instructions below).
@@ -59,6 +79,8 @@ These uses of these functions are given below.
 ## Versions
 
 ### Unreleased
+
+* Added support for Codecov.
 
 ### 1.10.0.0
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
