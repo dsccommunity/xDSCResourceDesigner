@@ -4,12 +4,13 @@
 end
 {
     Get-Module xDscResourceDesigner -All | Remove-Module -Force
-    Import-Module $PSScriptRoot\xDscResourceDesigner.psd1 -ErrorAction Stop
+    $script:modulePath = Join-Path -Path (Split-Path $PSScriptRoot -Parent) -ChildPath 'xDscResourceDesigner.psd1'
+    Import-Module -Name $script:modulePath -ErrorAction Stop
 
     Describe 'xDscResourceDesigner' {
         It 'Should not error if imported twice' {
             Get-Module xDscResourceDesigner -All | Remove-Module -Force
-            { Import-Module $PSScriptRoot\xDscResourceDesigner.psd1 -ErrorAction Stop } | Should Not Throw
+            { Import-Module $script:modulePath -ErrorAction Stop } | Should Not Throw
         }
     }
 
