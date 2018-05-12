@@ -81,6 +81,11 @@ These uses of these functions are given below.
 ### Unreleased
 
 * Added support for Codecov.
+* Fix Test-xDscSchema failing to call `Remove-WmiObject` on PowerShell Core.
+  The cmdlet `Remove-WmiObject` was removed from the code, instead the
+  temporary CIM class is now removed by using mofcomp.exe and the
+  preprocessor command [pragma deleteclass](https://msdn.microsoft.com/en-us/library/aa392751(v=vs.85).aspx)
+  (issue #67).
 
 ### 1.10.0.0
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
