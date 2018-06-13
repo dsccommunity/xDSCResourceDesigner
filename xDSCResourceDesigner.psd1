@@ -1,6 +1,6 @@
 @{
 # Version number of this module.
-moduleVersion = '1.10.0.0'
+moduleVersion = '1.11.0.0'
 
 # ID used to uniquely identify this module
 GUID = '74951b31-1aa5-472b-9109-738de1bca38f'
@@ -55,9 +55,12 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '* Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
-* Helper function Test-xDscSchemaEncoding now supports PowerShell Core (issue 64).
-* Changed README.md encoding to UTF8.
+        ReleaseNotes = '* Added support for Codecov.
+* Fix Test-xDscSchema failing to call `Remove-WmiObject` on PowerShell Core.
+  The cmdlet `Remove-WmiObject` was removed from the code, instead the
+  temporary CIM class is now removed by using mofcomp.exe and the
+  preprocessor command [pragma deleteclass](https://msdn.microsoft.com/en-us/library/aa392751(v=vs.85).aspx)
+  (issue 67).
 
 '
 
@@ -65,5 +68,6 @@ PrivateData = @{
 
 } # End of PrivateData hashtable
 }
+
 
 

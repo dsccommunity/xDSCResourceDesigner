@@ -80,6 +80,8 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+### 1.11.0.0
+
 * Added support for Codecov.
 * Fix Test-xDscSchema failing to call `Remove-WmiObject` on PowerShell Core.
   The cmdlet `Remove-WmiObject` was removed from the code, instead the
