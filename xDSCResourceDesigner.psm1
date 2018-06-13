@@ -2535,10 +2535,19 @@ function Test-MockSchema
         }
         return ($errorIds.Length -eq 0)
     }
-    finally{
+    finally
+    {
         if ($newSchemaName)
         {
-            Remove-WmiObject -Class $newSchemaName -Namespace root\microsoft\windows\DesiredStateConfiguration -ErrorAction Ignore
+            Write-Verbose -Message ('Removing temporary CIM class ''{0}''.' -f $newSchemaName)
+            <#
+                Using mofcomp.exe and preprocessor command to delete an existing
+                class, and using 'nofail' flag so that no error is report if the
+                class does not exist. Assumed that it can be delete if the class
+                exist.
+            #>
+            Set-Content -Path $newSchemaPath -Value ('#pragma deleteclass("{0}",nofail)' -f $newSchemaName) -Force
+            & $mofcomp -N:root\microsoft\windows\DesiredStateConfiguration $newSchemaPath | Out-Null
         }
 
         if ($newSchemaPath)
