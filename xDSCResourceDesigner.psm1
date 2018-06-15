@@ -2428,15 +2428,15 @@ function Test-MockSchema
             if ($_ -cmatch "^class\s+([\w-&\(\)\[\]]+)\s*:?")
             {
                 $className = $Matches[1]
-                if($className -eq $schemaName)
-                {
-                    $classNameMatch = $true
-                }
             }
 
             if ($_ -cmatch "^class\s+$className\s*:\s*OMI_BaseResource")
             {
-                $extendsOMI = $true
+                $extendsOMI = $true                
+                if($className -eq $schemaName)
+                {
+                    $classNameMatch = $true
+                }
                 $newLine = $_ -replace $Matches[0],"class $newSchemaName"
             }
 
