@@ -2418,6 +2418,8 @@ function Test-MockSchema
 
         $extendsOMI = $false
 
+        $classNameMatch = $false;
+
         Get-Content $Schema | % {
             $newLine = $_
 
@@ -2430,14 +2432,18 @@ function Test-MockSchema
 
             if ($_ -cmatch "^class\s+$className\s*:\s*OMI_BaseResource")
             {
-                $extendsOMI = $true
+                $extendsOMI = $true                
+                if($className -eq $schemaName)
+                {
+                    $classNameMatch = $true
+                }
                 $newLine = $_ -replace $Matches[0],"class $newSchemaName"
             }
 
             Add-Content $newSchemaPath $newLine
         }
 
-        if (-not $extendsOMI -or ($schemaName -ne $className))
+        if (-not $extendsOMI -or -not $classNameMatch)
         {
             $errorIds = @()
 

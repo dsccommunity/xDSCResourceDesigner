@@ -234,7 +234,11 @@ begin
                     [Parameter(Mandatory)]
                     [string] $RequiredProperty,
 
-                    [string] $WriteProperty
+                    [string] $WriteProperty,
+
+                    [Parameter()]
+                    [Microsoft.Management.Infrastructure.CimInstance]
+                    $SubClass
                 )
             }
 
@@ -249,7 +253,11 @@ begin
                     [Parameter(Mandatory)]
                     [string] $RequiredProperty,
 
-                    [string] $WriteProperty
+                    [string] $WriteProperty,
+
+                    [Parameter()]
+                    [Microsoft.Management.Infrastructure.CimInstance]
+                    $SubClass
                 )
 
                 return $false
@@ -269,7 +277,16 @@ class TestResource : OMI_BaseResource
     [required] string RequiredProperty;
     [write] string WriteProperty;
     [read] string ReadProperty;
+    [write, EmbeddedInstance("SubClass")] string SubClass;
 };
+
+[ClassVersion("1.0.0")]
+class SubClass
+{
+    [write] string WriteProperty1;
+    [write] string WriteProperty2;
+};
+
 '@
 
         return $content

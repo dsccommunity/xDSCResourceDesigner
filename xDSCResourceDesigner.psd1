@@ -1,6 +1,6 @@
 @{
 # Version number of this module.
-moduleVersion = '1.11.0.0'
+moduleVersion = '1.12.0.0'
 
 # ID used to uniquely identify this module
 GUID = '74951b31-1aa5-472b-9109-738de1bca38f'
@@ -55,12 +55,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '* Added support for Codecov.
-* Fix Test-xDscSchema failing to call `Remove-WmiObject` on PowerShell Core.
-  The cmdlet `Remove-WmiObject` was removed from the code, instead the
-  temporary CIM class is now removed by using mofcomp.exe and the
-  preprocessor command [pragma deleteclass](https://msdn.microsoft.com/en-us/library/aa392751(v=vs.85).aspx)
-  (issue 67).
+        ReleaseNotes = '* Fixed `Test-MockSchema` to return True if class name matches resource name when there are multiple embeded classes in the schema mof. [issue 123](https://github.com/PowerShell/xDSCResourceDesigner/issues/73).
 
 '
 
@@ -68,6 +63,7 @@ PrivateData = @{
 
 } # End of PrivateData hashtable
 }
+
 
 
 
