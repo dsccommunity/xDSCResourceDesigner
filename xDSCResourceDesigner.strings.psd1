@@ -3,9 +3,9 @@
 ConvertFrom-StringData @'
 ###PSLOC
 ModuleParsingError=There was an error parsing the module file {0}
-SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to Unicode?
-SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII.
-SchemaFileReEncodingVerbose=Re-encoding the schema file in Unicode.
+SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to ASCII?
+SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use ASCII.
+SchemaFileReEncodingVerbose=Re-encoding the schema file in ASCII.
 SchemaModuleReadError=Property {0} declared as Read in the schema, cannot be a parameter in the module.
 SchemaModuleAttributeError=Property {0} has a different attribute in the schema than in the module.
 SchemaModuleTypeError=Property {0} has a different type in the schema than in the module.
@@ -57,7 +57,7 @@ IfRebootRequired=Include this line if the resource requires a system reboot.
 BadSchemaPath=The parameter -Schema must be a path to a .schema.mof file.
 BadResourceMOdulePath=The parameter -ResourceModule must be a path to a .psm1 or .dll file.
 SchemaParseError=There was an error parsing the Schema file.
-GetCimClass-Error=There was an error retrieving the Schema. 
+GetCimClass-Error=There was an error retrieving the Schema.
 ImportResourceModuleError=There was an error importing the Resource Module.
 KeyFunctionsNotDefined=The following functions were not found: {0}.
 MissingOMI_BaseResourceError=The Schema must be defined as "class {0} : OMI_BaseResource".
@@ -84,7 +84,7 @@ GetParametersDifferentError=Set-TargetResource and Test-TargetResource must incl
 GetMissingKeyOrRequiredError=The function Get-TargetResource must take all Key and Required properties, and they must be mandatory. There was an issue with property {0}.
 SetAndTestMissingParameterError=The functions Set-TargetResource and Test-TargetResource must take all Key, Required and Write properties. There is an issue with the parameter {0} defined in the schema.
 SetAndTestExtraParameterError=The functions Set-TargetResource and Test-TargetResource have an extra parameter {0} that is not defined in the schema.
-GetTakesReadError=The function Get-TargetResource can not take the read property {0}, defined in the schema, as a parameter. 
+GetTakesReadError=The function Get-TargetResource can not take the read property {0}, defined in the schema, as a parameter.
 SetTestTakeReadError=The functions Set-TargetResource and Test-TargetResource can not take the read property {0} defined in the schema as a parameter.
 ###PSLOC
 '@
