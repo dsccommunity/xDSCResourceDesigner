@@ -196,6 +196,26 @@ end
 
             }
         }
+
+        Describe 'New-DelimitedList' {
+            It 'Should return the correct default single quote string list' {
+                $List = 'a','b','c'
+                $Result = New-DelimitedList $List -String
+                $Result | Should Be "'a','b','c'"
+            }
+
+            It 'Should return the correct single quote string list' {
+                $List = 'a','b','c'
+                $Result = New-DelimitedList $List -String -QuoteType Single
+                $Result | Should Be "'a','b','c'"
+            }
+
+            It 'Should return the correct double quote string list' {
+                $List = 'a','b','c'
+                $Result = New-DelimitedList $List -String -QuoteType Double
+                $Result | Should Be '"a","b","c"'
+            }
+        }
     }
 }
 
