@@ -40,19 +40,20 @@ For more information about Windows PowerShell Desired State Configuration, check
 There are also great community resources, such as [PowerShell.org](http://powershell.org/wp/tag/dsc/), or [PowerShell Magazine](http://www.powershellmagazine.com/tag/dsc/).
 For more information on the DSC Resource Kit, check out [this blog post](http://go.microsoft.com/fwlink/?LinkID=389546).
 
-
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
 
 ## Installation
 
 To install **xDSCResourceDesigner** module
 
-*   Unzip the content under $env:ProgramFiles\WindowsPowerShell\Modules folder
+* Unzip the content under $env:ProgramFiles\WindowsPowerShell\Modules folder
 
 To confirm installation:
 
-*   Run **Get-Module -ListAvailable** to see that **xDSCResourceDesigner** is among the modules listed
+* Run **Get-Module -ListAvailable** to see that **xDSCResourceDesigner** is among the modules listed
 
 ## Requirements
 
@@ -62,25 +63,26 @@ Please read the installation instructions that are present on both the download 
 
 ## Description
 
-The **xDSCResourceDesigner ** module exposes 6 functions: **New-xDscResourceProperty, New-xDscResource, Update-xDscResource, Test-xDscResource, Test-xDscSchema and Import-xDscSchema **.
+The **xDSCResourceDesigner** module exposes 6 functions: **New-xDscResourceProperty, New-xDscResource, Update-xDscResource, Test-xDscResource, Test-xDscSchema and Import-xDscSchema**.
 These uses of these functions are given below.
 
 ## Details
 
 **xDSCResourceDesigner** module exposes the following functions:
 
-*   **New-xDscResourceProperty**: For creating a property for the resource
-*   **New-xDscResource**: for creating the actual resource containing the schema and module skeleton
-*   **Update-xDscResource**: for updating an existing resource with new properties
-*   **Test-xDscResource**: for testing whether an existing resource conforms to the rules required by DSC
-*   **Test-xDscSchema**: for testing whether an existing schema (schema.mof) conforms to the rules required by DSC
-*   **Import-xDscSchema**: for getting the properties in a schema returned as a hashtable
+* **New-xDscResourceProperty**: For creating a property for the resource
+* **New-xDscResource**: for creating the actual resource containing the schema and module skeleton
+* **Update-xDscResource**: for updating an existing resource with new properties
+* **Test-xDscResource**: for testing whether an existing resource conforms to the rules required by DSC
+* **Test-xDscSchema**: for testing whether an existing schema (schema.mof) conforms to the rules required by DSC
+* **Import-xDscSchema**: for getting the properties in a schema returned as a hashtable
 
 ## Versions
 
 ### Unreleased
 
 * Fix Parameter Blocks to conform to Dsc Style Guidlelines [issue #79](https://github.com/PowerShell/xDSCResourceDesigner/issues/79).
+* Fix README.md MarkDownLint Errors and Formatting Issues
 
 ### 1.12.0.0
 
@@ -96,6 +98,7 @@ These uses of these functions are given below.
   (issue #67).
 
 ### 1.10.0.0
+
 * Converted appveyor.yml to install Pester from PSGallery instead of from Chocolatey.
 * Helper function Test-xDscSchemaEncoding now supports PowerShell Core (issue #64).
 * Changed README.md encoding to UTF8.
@@ -146,20 +149,21 @@ The commands that require Administrator rights already check for it anyway, and 
 
 ### 1.1.2
 
-*   Ignore -WhatIf and -Confirm internal parameters to suppress false errors when Set-TargetResource declares [CmdletBinding(SupportsShouldProcess=$true)]
+* Ignore -WhatIf and -Confirm internal parameters to suppress false errors when Set-TargetResource declares [CmdletBinding(SupportsShouldProcess=$true)]
 
 ### 1.1.1.1
 
-*   Metadata updates.
+* Metadata updates.
 
 ### 1.0.0.0
 
-*   Initial release for xDSCResourceDesigner
+* Initial release for xDSCResourceDesigner
 
 ## Examples
 
-## Create a Sample DSC ADUser Resource
-This example creates a ADUser DSC resource.
+### Create a Sample DSC ADUser Resource
+
+This example creates an ADUser DSC resource.
 
 ```powershell
 <#
@@ -179,7 +183,7 @@ $DomainCredential = New-xDscResourceProperty -Name DomainAdministratorCredential
 $Ensure = New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet "Present", "Absent"
 #Now create the resource
 New-xDscResource -Name Contoso_cADUser -Property $UserName, $Password, $DomainCredential, $Ensure  -Path 'C:\Program Files\WindowsPowerShell\Modules\xActiveDirectory'
-
+```
 
 ### Test an Incorrect Resource Definition
 
@@ -212,8 +216,8 @@ class Contoso_cADUser : OMI_BaseResource
 Test-xDscSchema -Path .\buggy.schema.mof
 ```
 
-
 ### Updates an Existing Resource
+
 This example will use Update-xDscResource function to update an already existing resource properties
 
 ```powershell
@@ -228,7 +232,3 @@ $lastLogOn = New-xDscResourceProperty -Name LastLogOn -Type Hashtable -Attribute
 #Update the existing resource
 Update-xDscResource -Name 'Contoso_cADUser' -Property $UserName, $Password, $DomainCredential, $Ensure, $lastLogOn -Force
 ```
-
-
-## Contributing
-Please check out common DSC Resources [contributing guidelines](https://github.com/PowerShell/DscResource.Kit/blob/master/CONTRIBUTING.md).
