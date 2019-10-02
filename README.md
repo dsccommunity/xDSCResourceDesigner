@@ -81,6 +81,7 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+* Fix Parameter Blocks to conform to Dsc Style Guidlelines [issue #79](https://github.com/PowerShell/xDSCResourceDesigner/issues/79).
 * Fix README.md MarkDownLint Errors and Formatting Issues
 
 ### 1.12.0.0
