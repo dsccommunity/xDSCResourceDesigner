@@ -1218,7 +1218,11 @@ function New-DscModuleParameter
     if (([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Key -eq $Parameter.Attribute) `
             -or ([Microsoft.PowerShell.xDesiredStateConfiguration.DscResourcePropertyAttribute]::Required -eq $Parameter.Attribute))
     {
-        Add-StringBuilderLine $ParameterBuilder "[parameter(Mandatory = `$true)]" -IndentCount 2
+        Add-StringBuilderLine $ParameterBuilder "[Parameter(Mandatory = `$true)]" -IndentCount 2
+    }
+    else
+    {
+        Add-StringBuilderLine $ParameterBuilder "[Parameter()]" -IndentCount 2
     }
 
     if ($Parameter.Values)
