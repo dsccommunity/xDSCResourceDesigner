@@ -80,6 +80,8 @@ These uses of these functions are given below.
 
 ### Unreleased
 
+* New-xDscResource: Change Dsc Module Validate Set Quotes to Singles
+
 ### 1.12.0.0
 
 * Fixed `Test-MockSchema` to return True if class name matches resource name when there are multiple embeded classes in the schema mof. [issue #123](https://github.com/PowerShell/xDSCResourceDesigner/issues/73).
