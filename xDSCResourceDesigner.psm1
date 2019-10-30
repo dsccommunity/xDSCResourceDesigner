@@ -870,7 +870,7 @@ function New-DscSchemaParameter
     {
         Add-StringBuilderLine $SchemaEntry ", ValueMap{" -Append
 
-        $CommaList = New-DelimitedList $Parameter.ValueMap -String:($Parameter.Type -eq "String" -or $Parameter.Type -eq "String[]")
+        $CommaList = New-DelimitedList $Parameter.ValueMap -String:($Parameter.Type -eq "String" -or $Parameter.Type -eq "String[]") -QuoteType Double
 
         Add-StringBuilderLine $SchemaEntry $CommaList -Append
         Add-StringBuilderLine $SchemaEntry "}" -Append
@@ -880,7 +880,7 @@ function New-DscSchemaParameter
     {
         Add-StringBuilderLine $SchemaEntry ", Values{" -Append
 
-        $CommaList = New-DelimitedList $Parameter.Values -String
+        $CommaList = New-DelimitedList $Parameter.Values -String -QuoteType Double
 
         Add-StringBuilderLine $SchemaEntry $CommaList -Append
         Add-StringBuilderLine $SchemaEntry "}" -Append
@@ -916,8 +916,23 @@ function New-DelimitedList
         $String,
 
         [String]
-        $Separator = ","
+        $Separator = ",",
+
+        [Parameter()]
+        [ValidateSet('Single', 'Double')]
+        [String]
+        $QuoteType = 'Single'
+
     )
+
+    if ($QuoteType -eq 'Single')
+    {
+        $Quote = ''''
+    }
+    else
+    {
+        $Quote = '"'
+    }
 
     $CommaList = New-Object -TypeName System.Text.StringBuilder
 
@@ -929,9 +944,9 @@ function New-DelimitedList
         #  the validateSet items need to be wrapped in quotes?
         if ($String)
         {
-            Add-StringBuilderLine $CommaList "`"" -Append
+            Add-StringBuilderLine $CommaList $Quote -Append
             Add-StringBuilderLine $CommaList $curItem -Append
-            Add-StringBuilderLine $CommaList "`"" -Append
+            Add-StringBuilderLine $CommaList $Quote -Append
         }
         else
         {
@@ -2436,7 +2451,7 @@ function Test-MockSchema
 
             if ($_ -cmatch "^class\s+$className\s*:\s*OMI_BaseResource")
             {
-                $extendsOMI = $true                
+                $extendsOMI = $true
                 if($className -eq $schemaName)
                 {
                     $classNameMatch = $true
