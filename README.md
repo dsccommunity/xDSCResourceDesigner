@@ -85,6 +85,7 @@ These uses of these functions are given below.
 
 * Fix Parameter Blocks to conform to Dsc Style Guidlelines [issue #79](https://github.com/PowerShell/xDSCResourceDesigner/issues/79).
 * Fix README.md MarkDownLint Errors and Formatting Issues
+* New-xDscResource: Change Resource Output File encoding to ASCII
 
 ### 1.12.0.0
 

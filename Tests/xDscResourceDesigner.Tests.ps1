@@ -61,7 +61,7 @@ end
                 $result | Should Be $false
 
                 Assert-MockCalled -CommandName 'Write-Error' -ParameterFilter {
-                    $message -eq 'The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supported in GIT.)'
+                    $message -eq 'The encoding for the schema file is not supported. Please use ASCII.'
                 } -Exactly -Times 1 -ModuleName 'xDscResourceDesigner'
             }
         }

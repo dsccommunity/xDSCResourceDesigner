@@ -4,9 +4,9 @@ data LocalizedData
 # culture="en-US"
 ConvertFrom-StringData @'
 ModuleParsingError=There was an error parsing the module file {0}
-SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to Unicode?
-SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use Unicode or ASCII (Unicode is not well supported in GIT.)
-SchemaFileReEncodingVerbose=Re-encoding the schema file in Unicode.
+SchemaEncodingNotSupportedPrompt=The encoding for the schema file is not supported. Convert to ASCII?
+SchemaEncodingNotSupportedError=The encoding for the schema file is not supported. Please use ASCII.
+SchemaFileReEncodingVerbose=Re-encoding the schema file in ASCII.
 SchemaModuleReadError=Property {0} declared as Read in the schema, cannot be a parameter in the module.
 SchemaModuleAttributeError=Property {0} has a different attribute in the schema than in the module.
 SchemaModuleTypeError=Property {0} has a different type in the schema than in the module.
@@ -786,7 +786,7 @@ function New-DscSchema
 
     if (-not $SchemaExists -or $Force -or $ParentPSCmdlet.ShouldProcess($SchemaPath, $localizedData.OverWriteSchemaOperation))
     {
-        $Schema.ToString() | Out-File -FilePath $SchemaPath -Force -Confirm:$false
+        $Schema.ToString() | Out-File -FilePath $SchemaPath -Force -Confirm:$false -Encoding ascii
     }
     else
     {
@@ -1000,7 +1000,7 @@ function New-DscModule
 
     if (-not $ModuleExists -or $Force -or $ParentPSCmdlet.ShouldProcess($ModulePath, $localizedData.OverWriteModuleOperation))
     {
-        $Module.ToString() | Out-File -FilePath $ModulePath -Force -Confirm:$false
+        $Module.ToString() | Out-File -FilePath $ModulePath -Force -Confirm:$false -Encoding ascii
     }
     else
     {
@@ -1549,7 +1549,7 @@ function Update-DscModule
 
     if ($Force -or $ParentPSCmdlet.ShouldProcess($ModulePath, $localizedData.OverWriteModuleOperation))
     {
-        $newModule.ToString() | Out-File -FilePath $ModulePath -Force -Confirm:$false
+        $newModule.ToString() | Out-File -FilePath $ModulePath -Force -Confirm:$false -Encoding ascii
     }
     else
     {
@@ -2436,7 +2436,7 @@ function Test-MockSchema
 
             if ($_ -cmatch "^class\s+$className\s*:\s*OMI_BaseResource")
             {
-                $extendsOMI = $true                
+                $extendsOMI = $true
                 if($className -eq $schemaName)
                 {
                     $classNameMatch = $true
@@ -2620,13 +2620,13 @@ function Test-xDscSchemaEncoding
         -and ($schemaBytes[1] -eq 187) `
         -and ($schemaBytes[2] -eq 191))
     {
-        #Prompt the user to re-encode their schema as Unicode...
+        #Prompt the user to re-encode their schema as ASCII...
         if (!(Test-TestHarness) -and $pscmdlet.ShouldProcess($Schema, $localizedData["SchemaEncodingNotSupportedPrompt"]))
         {
             Write-Verbose $localizedData["SchemaFileReEncodingVerbose"]
 
             $schemaContent = Get-Content $Schema
-            $schemaContent | Out-File -Encoding unicode $Schema -Force
+            $schemaContent | Out-File -Encoding ascii $Schema -Force
         }
         #Otherwise fail
         else
