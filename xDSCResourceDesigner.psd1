@@ -1,6 +1,6 @@
 @{
 # Version number of this module.
-moduleVersion = '1.12.0.0'
+moduleVersion = '1.13.0.0'
 
 # ID used to uniquely identify this module
 GUID = '74951b31-1aa5-472b-9109-738de1bca38f'
@@ -55,7 +55,8 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '* Fixed `Test-MockSchema` to return True if class name matches resource name when there are multiple embeded classes in the schema mof. [issue 123](https://github.com/PowerShell/xDSCResourceDesigner/issues/73).
+        ReleaseNotes = '* Fix Parameter Blocks to conform to Dsc Style Guidlelines [issue 79](https://github.com/PowerShell/xDSCResourceDesigner/issues/79).
+* Fix README.md MarkDownLint Errors and Formatting Issues
 
 '
 
@@ -63,6 +64,7 @@ PrivateData = @{
 
 } # End of PrivateData hashtable
 }
+
 
 
 
